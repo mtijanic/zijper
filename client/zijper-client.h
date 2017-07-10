@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 
-#ifdef DEBUGGER_SUPPORT
+#ifdef DEBUG
 #define breakpoint()  __asm__ __volatile__ ("int $3")
 #else
 #define breakpoint()

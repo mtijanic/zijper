@@ -1,20 +1,21 @@
 include ../common.mk
 
 
-#SOURCES := $(foreach dir,$(shell find . -type d),$(wildcard $(dir)/*.c))
-#HEADERS := $(foreach dir,$(shell find . -type d),$(wildcard $(dir)/*.h))
 SOURCES := $(wildcard *.c)
 HEADERS := $(wildcard *.h)
 
 
-CFLAGS += -m32 -fPIC -shared
+CFLAGS += -m32 -fPIC -shared -Wall -Wextra -ggdb
 CFLAGS += -D_GNU_SOURCE
 
 ifdef OPTIMIZE
   CFLAGS += -O2
 endif
+ifdef DEBUG
+  CFLAGS += -DDEBUG=$(DEBUG)
+endif
 
-LDLIBS=-lglut -lGLEW -lGL -lm
+LDLIBS=-lGLEW -lGL
 
 
 all: _out/zijper-client.so

@@ -60,7 +60,7 @@ void apply_patch(uintptr_t address, const void *patch, size_t patch_size)
 // and client will work without given functionality
 //
 __attribute__((weak)) void framerate_notify_frame(void)     { }
-__attribute__((weak)) void framerate_print_report(FILE *f)  { }
+__attribute__((weak)) void framerate_print_report(FILE *f)  { (void)sizeof(f); }
 __attribute__((weak)) void fbo_draw(void)                   { }
 __attribute__((weak)) void fbo_use(void)                    { }
 __attribute__((weak)) void fbo_init(void)                   { }

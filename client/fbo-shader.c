@@ -84,21 +84,21 @@ void fbo_init(void)
     glAttachShader(program, fs);
     glLinkProgram(program);
 
-    glGetProgramiv(program, GL_LINK_STATUS, &status);
+    glGetProgramiv(program, GL_LINK_STATUS, (GLint*)&status);
     ASSERT(status != 0, "%u", status);
 
     glValidateProgram(program);
-    glGetProgramiv(program, GL_VALIDATE_STATUS, &status);
+    glGetProgramiv(program, GL_VALIDATE_STATUS, (GLint*)&status);
     ASSERT(status != 0, "%u", status);
 
     attribute_v_coord = glGetAttribLocation(program, "v_coord");
-    ASSERT(attribute_v_coord != -1);
+    ASSERT(attribute_v_coord != ~0u);
 
-    uniform_texture_fbo = glGetUniformLocation(program, "texture_fbo");
-    ASSERT(uniform_texture_fbo != -1);
+    uniform_texture_fbo = glGetUniformLocation(program, "fbo_texture");
+    ASSERT(uniform_texture_fbo != ~0u);
 
     uniform_offset = glGetUniformLocation(program, "offset");
-    ASSERT(uniform_offset != -1);
+    ASSERT(uniform_offset != ~0u);
 }
 
 void fbo_destroy(void)
