@@ -21,13 +21,12 @@ void gl_hooks_initialize(void)
 }
 void gl_hooks_shutdown(void)
 {
-    fbo_destroy();
 }
 
 void SDL_GL_SwapBuffers(void)
 {
     fbo_draw();
     original.SDL_GL_SwapBuffers();
-    fbo_use();
+    fbo_use(FBO_PRIMARY);
     framerate_notify_frame();
 }

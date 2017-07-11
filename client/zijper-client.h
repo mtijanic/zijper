@@ -46,8 +46,10 @@ void apply_patch(uintptr_t address, const void *patch, size_t patch_size);
 void framerate_notify_frame(void);
 void framerate_print_report(FILE *f);
 
+#define FBO_NONE    0
+#define FBO_PRIMARY 1
+#define FBO_GUI     2
+
 void fbo_draw(void);
-void fbo_use(void);
-void fbo_init(void);
-void fbo_destroy(void);
+void fbo_use(int which);
 #endif // ZIJPER_CLIENT_H
