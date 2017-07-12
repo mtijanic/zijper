@@ -18,6 +18,8 @@
 #define breakpoint()
 #endif
 
+#define UNUSED(x) (void)sizeof(x)
+
 extern FILE *logfile;
 
 #define _STR2(x) #x

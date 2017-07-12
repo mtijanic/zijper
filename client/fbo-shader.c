@@ -39,8 +39,7 @@ struct shader
     } attribute;
     struct
     {
-        GLuint texture_primary;
-        GLuint texture_gui;
+        GLuint texture;
         GLuint frame_num;
         GLuint seconds;
         GLuint offset; /// @todo temporary for test shaders
@@ -50,11 +49,15 @@ struct shader
 };
 
 struct shader primary_shader;
+struct shader passthrough_shader;
 
 
 /// @todo load from environment
 static const char vertex_shader_name[]   = "shaders/zijper.vert";
 static const char fragment_shader_name[] = "shaders/zijper.frag";
+
+static const char passthrough_vertex_shader_name[]   = "shaders/passthrough.vert";
+static const char passthrough_fragment_shader_name[] = "shaders/passthrough.frag";
 
 // Utilities from openGL tutorials
 GLuint create_shader(const char* filename, GLenum type);
@@ -63,7 +66,7 @@ GLuint create_shader(const char* filename, GLenum type);
 GLsizei screen_width  = 1920;
 GLsizei screen_height = 1080;
 
-void fbo_alloc(struct fbo *fbo)
+static void fbo_alloc(struct fbo *fbo)
 {
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &fbo->texture);
@@ -99,7 +102,7 @@ void fbo_alloc(struct fbo *fbo)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void fbo_free(struct fbo *fbo)
+static void fbo_free(struct fbo *fbo)
 {
     glDeleteRenderbuffers(1, &fbo->rbo);
     glDeleteTextures(1, &fbo->texture);
@@ -107,7 +110,7 @@ void fbo_free(struct fbo *fbo)
     glDeleteBuffers(1, &fbo->vbo);
 }
 
-void fbo_alloc_shader(struct shader *shader, const char *vert, const char *frag)
+static void fbo_alloc_shader(struct shader *shader, const char *vert, const char *frag)
 {
     GLint status;
 
@@ -129,16 +132,16 @@ void fbo_alloc_shader(struct shader *shader, const char *vert, const char *frag)
     shader->attribute.v_coord = glGetAttribLocation(shader->program, "v_coord");
     ASSERT(shader->attribute.v_coord != ~0u);
 
-    shader->uniform.texture_primary = glGetUniformLocation(shader->program, "fbo_texture");
-    ASSERT(shader->uniform.texture_primary != ~0u);
+    shader->uniform.texture = glGetUniformLocation(shader->program, "fbo_texture");
+    ASSERT(shader->uniform.texture != ~0u);
 
     shader->uniform.offset = glGetUniformLocation(shader->program, "offset");
-    ASSERT(shader->uniform.offset != ~0u);
+    //ASSERT(shader->uniform.offset != ~0u);
 }
 
-void fbo_free_shader(struct shader *shader)
+static void fbo_free_shader(struct shader *shader)
 {
-    (void)sizeof(shader);
+    UNUSED(shader);
     /// @todo implement
 }
 
@@ -151,6 +154,7 @@ void fbo_init(void)
     fbo_alloc(&gui_fbo);
 
     fbo_alloc_shader(&primary_shader, vertex_shader_name, fragment_shader_name);
+    fbo_alloc_shader(&passthrough_shader, passthrough_vertex_shader_name, passthrough_fragment_shader_name);
 
     fbo_initialized = 1;
 }
@@ -159,10 +163,33 @@ void fbo_destroy(void) __attribute__((destructor));
 void fbo_destroy(void)
 {
     fbo_free_shader(&primary_shader);
+    fbo_free_shader(&passthrough_shader);
     fbo_free(&gui_fbo);
     fbo_free(&primary_fbo);
 }
 
+static void draw_fbo_with_shader(struct fbo *fbo, struct shader *shader)
+{
+    /// @todo This is only for the test effect
+    static GLfloat move = 0;
+    move += 0.01f;
+
+    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glUseProgram(shader->program);
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1f(shader->uniform.offset, move);
+
+    glBindTexture(GL_TEXTURE_2D, fbo->texture);
+    glUniform1i(shader->uniform.texture, GL_TEXTURE0);
+    glEnableVertexAttribArray(shader->attribute.v_coord);
+
+    glBindBuffer(GL_ARRAY_BUFFER, fbo->fbo);
+    glVertexAttribPointer(shader->attribute.v_coord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glDisableVertexAttribArray(shader->attribute.v_coord);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
 void fbo_draw(void)
 {
@@ -172,27 +199,12 @@ void fbo_draw(void)
     if (!fbo_initialized)
         return;
 
-    /// @todo This is only for the test effect
-    static GLfloat move = 0;
-    move += 0.01f;
-
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glUseProgram(primary_shader.program);
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1f(primary_shader.uniform.offset, move);
 
-    glBindTexture(GL_TEXTURE_2D, primary_fbo.texture);
-    glUniform1i(primary_shader.uniform.texture_primary, GL_TEXTURE0);
-    glEnableVertexAttribArray(primary_shader.attribute.v_coord);
-
-    glBindBuffer(GL_ARRAY_BUFFER, primary_fbo.fbo);
-    glVertexAttribPointer(primary_shader.attribute.v_coord, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDisableVertexAttribArray(primary_shader.attribute.v_coord);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+    draw_fbo_with_shader(&primary_fbo, &primary_shader);
+    draw_fbo_with_shader(&gui_fbo, &passthrough_shader);
 }
 
 void fbo_use(int which)
@@ -202,14 +214,21 @@ void fbo_use(int which)
 
     switch (which)
     {
-        case FBO_NONE:    glBindFramebuffer(GL_FRAMEBUFFER, 0);                break;
-        case FBO_PRIMARY: glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);  break;
-        case FBO_GUI:     glBindFramebuffer(GL_FRAMEBUFFER, gui_fbo.fbo);      break;
+        case FBO_NONE:
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+          break;
+        case FBO_PRIMARY:
+            glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);
+          break;
+        case FBO_GUI:
+            glBindFramebuffer(GL_FRAMEBUFFER, gui_fbo.fbo);
+            glClearColor(0.0, 0.0, 0.0, 0.0);
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+          break;
         default:
             ASSERT(0, "%d", which);
-            break;
+          break;
     }
-    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glUseProgram(0); // Restore fixed function pipeline
     //glPopMatrix();
     //glPopAttrib();
