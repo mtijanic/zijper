@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-
+#include <time.h>
 
 #ifdef DEBUG
 #define breakpoint()  __asm__ __volatile__ ("int $3")
@@ -46,6 +46,21 @@ void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy);
 //
 // Weak symbols used across modules
 //
+#define MAX_FRAMES_PER_SECOND 4000
+struct frame_data {
+    struct {
+        uint32_t seconds;
+        uint32_t microseconds;
+    } init_time;
+    struct {
+        uint32_t seconds;
+        uint32_t microseconds;
+    } last_frame_time;
+    uint32_t frames_this_second;
+    uint64_t total_frames;
+    uint32_t fps_histogram[MAX_FRAMES_PER_SECOND+1];
+};
+extern struct frame_data frame_data;
 void framerate_notify_frame(void);
 void framerate_print_report(FILE *f);
 

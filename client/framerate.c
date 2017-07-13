@@ -4,31 +4,27 @@
  * @author  mtijanic
  * @license GPL-2.0
  */
-#include "stdint.h"
-#include "stdio.h"
-#include "time.h"
+#include "zijper-client.h"
+
+#include <sys/time.h>
 
 
-#define MAX_FRAMES_PER_SECOND 4000
-static struct {
-    time_t init_time;
-    time_t last_frame_time;
-    uint32_t frames_this_second;
-    uint64_t total_frames;
-    uint32_t fps_histogram[MAX_FRAMES_PER_SECOND+1];
-} frame_data;
-
-
+struct frame_data frame_data;
+int gettimeofday(struct timeval *tv, struct timezone *tz);
 void framerate_init(void) __attribute__((constructor));
 void framerate_init(void)
 {
-    frame_data.init_time = time(NULL);
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    frame_data.init_time.seconds      = tv.tv_sec;
+    frame_data.init_time.microseconds = tv.tv_usec;
 }
 
 void framerate_notify_frame(void)
 {
-    time_t now = time(NULL);
-    if (now == frame_data.last_frame_time)
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    if ((uint32_t)tv.tv_sec == frame_data.last_frame_time.seconds)
     {
         frame_data.frames_this_second++;
     }
@@ -41,13 +37,14 @@ void framerate_notify_frame(void)
 
         frame_data.fps_histogram[frame_data.frames_this_second]++;
         frame_data.frames_this_second = 1;
-        frame_data.last_frame_time = now;
+        frame_data.last_frame_time.seconds      = tv.tv_sec;
+        frame_data.last_frame_time.microseconds = tv.tv_usec;
     }
 }
 
 void framerate_print_report(FILE *f)
 {
-    uint32_t runtime = frame_data.last_frame_time - frame_data.init_time;
+    uint32_t runtime = frame_data.last_frame_time.seconds - frame_data.init_time.seconds;
     fprintf(f, "Runtime: %u seconds\n", runtime);
     fprintf(f, "Total frames: %llu\n", frame_data.total_frames);
     fprintf(f, "Average fps: %f\n", (float)frame_data.total_frames / runtime);
