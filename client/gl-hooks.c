@@ -15,17 +15,43 @@ static struct {
     void (*SDL_GL_SwapBuffers)(void);
 } original;
 
-int __attribute__((thiscall)) WRAPPER_CGuiMan__UpdateAndRender(void* this, ...);
+
+void (*CGuiMan__UpdateAndRender)(void* this, float delta);
+int  (*CNWCMessage__HandleServerToPlayerMessage)(void *this, uint8_t *buffer, uint32_t size);
+int  (*CNWSMessage__SendServerToPlayerMessage)(uint32_t nPlayerId, uint8_t nMajor, uint8_t nMinor, uint8_t *pBuffer, uint32_t nBufferSize);
+
+
+
+int hook_CNWCMessage__HandleServerToPlayerMessage(void *this, uint8_t *buffer, uint32_t size)
+{
+    /// @todo Detect custom message to control shaders
+    return CNWCMessage__HandleServerToPlayerMessage(this, buffer, size);
+}
+
+void hook_CGuiMan__UpdateAndRender(void *this, float delta)
+{
+    fbo_use(FBO_GUI);
+    CGuiMan__UpdateAndRender(this, delta);
+    fbo_use(FBO_PRIMARY);
+}
+
+
+static void hook_nwmain_functions(void)
+{
+    CNWCMessage__HandleServerToPlayerMessage = make_detour((void*)0x815ed58,
+        hook_CNWCMessage__HandleServerToPlayerMessage, 5);
+
+    CGuiMan__UpdateAndRender = make_detour((void*)0x084b61e4,
+        hook_CGuiMan__UpdateAndRender, 5);
+
+    CNWSMessage__SendServerToPlayerMessage = (void*)0x83d58c4;
+}
 
 void gl_hooks_initialize(void)
 {
-    original.SDL_GL_SwapBuffers = dlsym(RTLD_NEXT, "SDL_GL_SwapBuffers");
+    hook_nwmain_functions();
 
-    uint32_t wrapper_offset;
-    wrapper_offset = (uint32_t)&WRAPPER_CGuiMan__UpdateAndRender - 0x8050f41 - 5;
-    apply_patch(0x8050f41 + 1, &wrapper_offset, 4);
-    wrapper_offset = (uint32_t)&WRAPPER_CGuiMan__UpdateAndRender - 0x8054771 - 5;
-    apply_patch(0x8054771 + 1, &wrapper_offset, 4);
+    original.SDL_GL_SwapBuffers = dlsym(RTLD_NEXT, "SDL_GL_SwapBuffers");
 }
 void gl_hooks_shutdown(void)
 {
@@ -37,16 +63,4 @@ void SDL_GL_SwapBuffers(void)
     original.SDL_GL_SwapBuffers();
     fbo_use(FBO_PRIMARY);
     framerate_notify_frame();
-}
-
-int __attribute__((thiscall)) WRAPPER_CGuiMan__UpdateAndRender(void* this, ...)
-{
-    UNUSED(this);
-    void *CGuiMan__UpdateAndRender = (void*)0x084b61e4;
-
-    fbo_use(FBO_GUI);
-      void *arg = __builtin_apply_args();
-      void *ret = __builtin_apply(CGuiMan__UpdateAndRender, arg, 32);
-    fbo_use(FBO_PRIMARY);
-    __builtin_return(ret);
 }

@@ -41,6 +41,7 @@ extern FILE *logfile;
     } while (0)
 
 void apply_patch(uintptr_t address, const void *patch, size_t patch_size);
+void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy);
 
 //
 // Weak symbols used across modules

@@ -9,6 +9,7 @@
 
 #include <string.h>
 #include <sys/mman.h>
+#include <stdlib.h>
 
 void zijper_client_initialize(void) __attribute__((constructor));
 void zijper_client_shutdown(void)   __attribute__((destructor));
@@ -20,6 +21,8 @@ void zijper_client_initialize(void)
     if (logfile)
         return;
     logfile = fopen("zijper-client.log", "w");
+
+    ASSERT(logfile);
 }
 void zijper_client_shutdown(void)
 {
@@ -33,12 +36,7 @@ void apply_patch(uintptr_t address, const void *patch, size_t patch_size)
     zijper_client_initialize();
 
     uintptr_t page = address & ~0xFFF;
-    if (mprotect((void*)page, (address - page) + patch_size, PROT_WRITE | PROT_READ | PROT_EXEC))
-    {
-        perror("mprotect");
-        ASSERT(0, "mprotect failure");
-        return;
-    }
+    ASSERT(!mprotect((void*)page, (address - page) + patch_size, PROT_WRITE | PROT_READ | PROT_EXEC));
 
     fprintf(logfile, "Applying patch at %p\n\tOld data:", (void*)address);
     for (size_t i = 0; i < patch_size; i++)
@@ -54,6 +52,29 @@ void apply_patch(uintptr_t address, const void *patch, size_t patch_size)
     memcpy((void*)address, patch, patch_size);
 }
 
+void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy)
+{
+    ASSERT(bytes_to_copy >= 5); // JMP+offset to hook
+
+    size_t trampoline_size = bytes_to_copy + 5;
+
+    uint8_t *trampoline = malloc(trampoline_size);
+    memcpy(trampoline, old_func, bytes_to_copy);
+
+    trampoline[bytes_to_copy] = 0xe9; // JMP relative
+    int32_t offset = ((intptr_t)old_func   + bytes_to_copy) -
+                     ((intptr_t)trampoline + trampoline_size);
+    memcpy(trampoline + trampoline_size - 4, &offset, 4);
+
+    uint8_t hook[5] = {0xe9};
+    offset = new_func - old_func - 5;
+    memcpy(&hook[1], &offset, 4);
+    apply_patch((uintptr_t)old_func, hook, sizeof(hook));
+
+    ASSERT(!mprotect((void*)((intptr_t)trampoline & ~0xFFF), 0x1000, PROT_READ | PROT_WRITE | PROT_EXEC));
+
+    return trampoline;
+}
 //
 // Weak stubs
 // If a C file is removed from compilation, the functions will be stubbed
