@@ -10,7 +10,7 @@
 
 
 struct frame_data frame_data;
-int gettimeofday(struct timeval *tv, struct timezone *tz);
+
 void framerate_init(void) __attribute__((constructor));
 void framerate_init(void)
 {
@@ -46,7 +46,7 @@ void framerate_print_report(FILE *f)
 {
     uint32_t runtime = frame_data.last_frame_time.seconds - frame_data.init_time.seconds;
     fprintf(f, "Runtime: %u seconds\n", runtime);
-    fprintf(f, "Total frames: %llu\n", frame_data.total_frames);
+    fprintf(f, "Total frames: %u\n", frame_data.total_frames);
     fprintf(f, "Average fps: %f\n", (float)frame_data.total_frames / runtime);
 
     fprintf(f, "Framerate histogram: \n");
@@ -62,4 +62,14 @@ void framerate_print_report(FILE *f)
         uint32_t bar_length = ((double)fps * sizeof(bar)) / runtime;
         fprintf(f, "\tfps[%4d]: %4u: %.*s\n", i, fps, bar_length, bar);
     }
+}
+uint32_t framerate_microseconds_since_last_frame(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    uint32_t elapsed = ((uint32_t)tv.tv_sec - frame_data.last_frame_time.seconds) * 1000000;
+    elapsed += tv.tv_usec;
+    elapsed -= frame_data.last_frame_time.microseconds;
+    return elapsed;
 }

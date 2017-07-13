@@ -41,7 +41,7 @@ char* file_read(const char* filename)
 /**
  * Display compilation errors from the OpenGL shader compiler
  */
-void print_log(GLuint object)
+char *print_log(GLuint object)
 {
   GLint log_length = 0;
   if (glIsShader(object))
@@ -50,7 +50,7 @@ void print_log(GLuint object)
     glGetProgramiv(object, GL_INFO_LOG_LENGTH, &log_length);
   else {
     fprintf(logfile, "printlog: Not a shader or a program\n");
-    return;
+    return "";
   }
 
   char* log = (char*)malloc(log_length);
@@ -62,6 +62,7 @@ void print_log(GLuint object)
 
   fprintf(logfile, "%s", log);
   free(log);
+  return "";
 }
 
 /**

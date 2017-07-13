@@ -57,10 +57,11 @@ struct frame_data {
         uint32_t microseconds;
     } last_frame_time;
     uint32_t frames_this_second;
-    uint64_t total_frames;
+    uint32_t total_frames;
     uint32_t fps_histogram[MAX_FRAMES_PER_SECOND+1];
 };
 extern struct frame_data frame_data;
+uint32_t framerate_microseconds_since_last_frame(void);
 void framerate_notify_frame(void);
 void framerate_print_report(FILE *f);
 
