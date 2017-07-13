@@ -14,6 +14,8 @@
 #include <GL/glext.h>
 #include <GL/glcorearb.h>
 
+#include <string.h>
+
 static int fbo_initialized;
 
 struct fbo
@@ -27,7 +29,7 @@ struct fbo
 struct fbo primary_fbo;
 struct fbo gui_fbo;
 
-struct shader
+struct program
 {
     GLuint program;
     GLuint vertex;
@@ -48,8 +50,8 @@ struct shader
     const char *fragment_name;
 };
 
-struct shader primary_shader;
-struct shader passthrough_shader;
+struct program primary_shader;
+struct program passthrough_shader;
 
 
 /// @todo load from environment
@@ -110,39 +112,43 @@ static void fbo_free(struct fbo *fbo)
     glDeleteBuffers(1, &fbo->vbo);
 }
 
-static void fbo_alloc_shader(struct shader *shader, const char *vert, const char *frag)
+static void fbo_alloc_program(struct program *program, const char *vert, const char *frag)
 {
     GLint status;
 
-    ASSERT(shader->vertex   = create_shader(vert, GL_VERTEX_SHADER));
-    ASSERT(shader->fragment = create_shader(frag, GL_FRAGMENT_SHADER));
+    ASSERT(program->vertex   = create_shader(vert, GL_VERTEX_SHADER));
+    ASSERT(program->fragment = create_shader(frag, GL_FRAGMENT_SHADER));
 
-    shader->program = glCreateProgram();
-    glAttachShader(shader->program, shader->vertex);
-    glAttachShader(shader->program, shader->fragment);
-    glLinkProgram(shader->program);
+    program->program = glCreateProgram();
+    glAttachShader(program->program, program->vertex);
+    glAttachShader(program->program, program->fragment);
+    glLinkProgram(program->program);
 
-    glGetProgramiv(shader->program, GL_LINK_STATUS, &status);
+    glGetProgramiv(program->program, GL_LINK_STATUS, &status);
     ASSERT(status != 0, "%d", status);
 
-    glValidateProgram(shader->program);
-    glGetProgramiv(shader->program, GL_VALIDATE_STATUS, &status);
+    glValidateProgram(program->program);
+    glGetProgramiv(program->program, GL_VALIDATE_STATUS, &status);
     ASSERT(status != 0, "%d", status);
 
-    shader->attribute.v_coord = glGetAttribLocation(shader->program, "v_coord");
-    ASSERT(shader->attribute.v_coord != ~0u);
+    program->attribute.v_coord = glGetAttribLocation(program->program, "v_coord");
+    ASSERT(program->attribute.v_coord != ~0u);
 
-    shader->uniform.texture = glGetUniformLocation(shader->program, "fbo_texture");
-    ASSERT(shader->uniform.texture != ~0u);
+    program->uniform.texture = glGetUniformLocation(program->program, "fbo_texture");
+    ASSERT(program->uniform.texture != ~0u);
 
-    shader->uniform.offset = glGetUniformLocation(shader->program, "offset");
-    //ASSERT(shader->uniform.offset != ~0u);
+    program->uniform.offset = glGetUniformLocation(program->program, "offset");
+    //ASSERT(program->uniform.offset != ~0u);
 }
 
-static void fbo_free_shader(struct shader *shader)
+static void fbo_free_program(struct program *program)
 {
-    UNUSED(shader);
-    /// @todo implement
+    glDetachShader(program->program, program->vertex);
+    glDetachShader(program->program, program->fragment);
+    glDeleteShader(program->vertex);
+    glDeleteShader(program->fragment);
+    glDeleteProgram(program->program);
+    memset(program, 0, sizeof(*program));
 }
 
 void fbo_init(void)
@@ -153,8 +159,8 @@ void fbo_init(void)
     fbo_alloc(&primary_fbo);
     fbo_alloc(&gui_fbo);
 
-    fbo_alloc_shader(&primary_shader, vertex_shader_name, fragment_shader_name);
-    fbo_alloc_shader(&passthrough_shader, passthrough_vertex_shader_name, passthrough_fragment_shader_name);
+    fbo_alloc_program(&primary_shader, vertex_shader_name, fragment_shader_name);
+    fbo_alloc_program(&passthrough_shader, passthrough_vertex_shader_name, passthrough_fragment_shader_name);
 
     fbo_initialized = 1;
 }
@@ -162,31 +168,31 @@ void fbo_init(void)
 void fbo_destroy(void) __attribute__((destructor));
 void fbo_destroy(void)
 {
-    fbo_free_shader(&primary_shader);
-    fbo_free_shader(&passthrough_shader);
+    fbo_free_program(&primary_shader);
+    fbo_free_program(&passthrough_shader);
     fbo_free(&gui_fbo);
     fbo_free(&primary_fbo);
 }
 
-static void draw_fbo_with_shader(struct fbo *fbo, struct shader *shader)
+static void draw_fbo_with_shader(struct fbo *fbo, struct program *program)
 {
     /// @todo This is only for the test effect
     static GLfloat move = 0;
     move += 0.01f;
 
     //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glUseProgram(shader->program);
+    glUseProgram(program->program);
     glActiveTexture(GL_TEXTURE0);
-    glUniform1f(shader->uniform.offset, move);
+    glUniform1f(program->uniform.offset, move);
 
     glBindTexture(GL_TEXTURE_2D, fbo->texture);
-    glUniform1i(shader->uniform.texture, GL_TEXTURE0);
-    glEnableVertexAttribArray(shader->attribute.v_coord);
+    glUniform1i(program->uniform.texture, GL_TEXTURE0);
+    glEnableVertexAttribArray(program->attribute.v_coord);
 
     glBindBuffer(GL_ARRAY_BUFFER, fbo->fbo);
-    glVertexAttribPointer(shader->attribute.v_coord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(program->attribute.v_coord, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDisableVertexAttribArray(shader->attribute.v_coord);
+    glDisableVertexAttribArray(program->attribute.v_coord);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

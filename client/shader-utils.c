@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 
+extern FILE *logfile;
 /**
  * Store all the file's contents in memory, useful to pass shaders
  * source code to OpenGL
@@ -48,7 +49,7 @@ void print_log(GLuint object)
   else if (glIsProgram(object))
     glGetProgramiv(object, GL_INFO_LOG_LENGTH, &log_length);
   else {
-    fprintf(stderr, "printlog: Not a shader or a program\n");
+    fprintf(logfile, "printlog: Not a shader or a program\n");
     return;
   }
 
@@ -59,7 +60,7 @@ void print_log(GLuint object)
   else if (glIsProgram(object))
     glGetProgramInfoLog(object, log_length, NULL, log);
 
-  fprintf(stderr, "%s", log);
+  fprintf(logfile, "%s", log);
   free(log);
 }
 
@@ -70,7 +71,7 @@ GLuint create_shader(const char* filename, GLenum type)
 {
   const GLchar* source = file_read(filename);
   if (source == NULL) {
-    fprintf(stderr, "Error opening %s: ", filename); perror("");
+    fprintf(logfile, "Error opening %s: ", filename); perror("");
     return 0;
   }
   GLuint res = glCreateShader(type);
@@ -109,7 +110,7 @@ GLuint create_shader(const char* filename, GLenum type)
   GLint compile_ok = GL_FALSE;
   glGetShaderiv(res, GL_COMPILE_STATUS, &compile_ok);
   if (compile_ok == GL_FALSE) {
-    fprintf(stderr, "%s:", filename);
+    fprintf(logfile, "%s:", filename);
     print_log(res);
     glDeleteShader(res);
     return 0;
@@ -140,7 +141,7 @@ GLuint create_program(const char *vertexfile, const char *fragmentfile) {
     GLint link_ok = GL_FALSE;
     glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
     if (!link_ok) {
-        fprintf(stderr, "glLinkProgram:");
+        fprintf(logfile, "glLinkProgram:");
         print_log(program);
         glDeleteProgram(program);
         return 0;
@@ -183,7 +184,7 @@ GLuint create_gs_program(const char *vertexfile, const char *geometryfile, const
     GLint link_ok = GL_FALSE;
     glGetProgramiv(program, GL_LINK_STATUS, &link_ok);
     if (!link_ok) {
-        fprintf(stderr, "glLinkProgram:");
+        fprintf(logfile, "glLinkProgram:");
         print_log(program);
         glDeleteProgram(program);
         return 0;
@@ -193,7 +194,7 @@ GLuint create_gs_program(const char *vertexfile, const char *geometryfile, const
 }
 #else
 GLuint create_gs_program(const char *vertexfile, const char *geometryfile, const char *fragmentfile, GLint input, GLint output, GLint vertices) {
-    fprintf(stderr, "Missing support for geometry shaders.\n");
+    fprintf(logfile, "Missing support for geometry shaders.\n");
     return 0;
 }
 #endif
@@ -201,13 +202,13 @@ GLuint create_gs_program(const char *vertexfile, const char *geometryfile, const
 GLint get_attrib(GLuint program, const char *name) {
     GLint attribute = glGetAttribLocation(program, name);
     if(attribute == -1)
-        fprintf(stderr, "Could not bind attribute %s\n", name);
+        fprintf(logfile, "Could not bind attribute %s\n", name);
     return attribute;
 }
 
 GLint get_uniform(GLuint program, const char *name) {
     GLint uniform = glGetUniformLocation(program, name);
     if(uniform == -1)
-        fprintf(stderr, "Could not bind uniform %s\n", name);
+        fprintf(logfile, "Could not bind uniform %s\n", name);
     return uniform;
 }
