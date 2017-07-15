@@ -32,7 +32,6 @@ struct fbo gui_fbo;
 struct program
 {
     GLuint program;
-    GLuint vertex;
     GLuint fragment;
 
     struct
@@ -50,9 +49,9 @@ struct program
     } uniform;
 };
 
-struct program primary_shader;
+struct program first_pass_shader;
+struct program second_pass_shader;
 struct program passthrough_shader;
-
 
 
 /// @todo load from environment
@@ -60,8 +59,12 @@ struct program passthrough_shader;
 static GLuint vertex_shader;
 static const char vertex_shader_name[]   = "shaders/zijper.vert";
 
-static const char fragment_shader_name[] = "shaders/zijper.frag";
-static const char passthrough_fragment_shader_name[] = "shaders/passthrough.frag";
+static const char common_shader_name[]     = "shaders/common.frag";
+static GLuint common_shader;
+
+static const char first_pass_shader_name[]  = "shaders/first_pass.frag";
+static const char second_pass_shader_name[] = "shaders/second_pass.frag";
+static const char passthrough_shader_name[] = "shaders/passthrough.frag";
 
 // Utilities from openGL tutorials
 GLuint create_shader(const char* filename, GLenum type);
@@ -122,6 +125,7 @@ static void fbo_alloc_program(struct program *program, const char *frag)
     ASSERT(program->fragment = create_shader(frag, GL_FRAGMENT_SHADER));
     program->program = glCreateProgram();
     glAttachShader(program->program, vertex_shader);
+    glAttachShader(program->program, common_shader);
     glAttachShader(program->program, program->fragment);
     glLinkProgram(program->program);
 
@@ -146,6 +150,7 @@ static void fbo_alloc_program(struct program *program, const char *frag)
 static void fbo_free_program(struct program *program)
 {
     glDetachShader(program->program, vertex_shader);
+    glDetachShader(program->program, common_shader);
     glDetachShader(program->program, program->fragment);
     glDeleteShader(program->fragment);
     glDeleteProgram(program->program);
@@ -162,12 +167,15 @@ void fbo_init(void)
 
     vertex_shader = create_shader(vertex_shader_name, GL_VERTEX_SHADER);
     ASSERT(vertex_shader != 0);
+    common_shader = create_shader(common_shader_name, GL_FRAGMENT_SHADER);
+    ASSERT(common_shader != 0);
 
     fbo_alloc(&primary_fbo);
     fbo_alloc(&gui_fbo);
 
-    fbo_alloc_program(&primary_shader, fragment_shader_name);
-    fbo_alloc_program(&passthrough_shader, passthrough_fragment_shader_name);
+    fbo_alloc_program(&first_pass_shader, first_pass_shader_name);
+    fbo_alloc_program(&second_pass_shader, second_pass_shader_name);
+    fbo_alloc_program(&passthrough_shader, passthrough_shader_name);
 
     fbo_initialized = 1;
 }
@@ -175,7 +183,7 @@ void fbo_init(void)
 void fbo_destroy(void) __attribute__((destructor));
 void fbo_destroy(void)
 {
-    fbo_free_program(&primary_shader);
+    fbo_free_program(&first_pass_shader);
     fbo_free_program(&passthrough_shader);
     fbo_free(&gui_fbo);
     fbo_free(&primary_fbo);
@@ -216,11 +224,16 @@ void fbo_draw(void)
     if (!fbo_initialized)
         return;
 
+    // First pass shader renders back to primary FBO, second pass renders to main FB.
+    glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);
+    draw_fbo_with_program(&primary_fbo, &first_pass_shader);
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
-    draw_fbo_with_program(&primary_fbo, &primary_shader);
+    draw_fbo_with_program(&primary_fbo, &second_pass_shader);
+
     draw_fbo_with_program(&gui_fbo, &passthrough_shader);
 }
 
