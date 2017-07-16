@@ -151,8 +151,8 @@ static void fbo_alloc_program(struct program *program, const char *frag)
     program->uniform.mouse_y       = glGetUniformLocation(program->program, "inMouseY");
     program->uniform.is_lmb_down   = glGetUniformLocation(program->program, "inIsLmbDown");
     program->uniform.is_rmb_down   = glGetUniformLocation(program->program, "inIsRmbDown");
-    program->uniform.was_lmb_up    = glGetUniformLocation(program->program, "inIsLmbUp");
-    program->uniform.was_rmb_up    = glGetUniformLocation(program->program, "inIsRmbUp");
+    program->uniform.was_lmb_up    = glGetUniformLocation(program->program, "inWasLmbUp");
+    program->uniform.was_rmb_up    = glGetUniformLocation(program->program, "inWasRmbUp");
 }
 
 static void fbo_free_program(struct program *program)

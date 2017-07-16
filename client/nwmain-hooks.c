@@ -73,7 +73,7 @@ int hook_CNWSMessage__SendServerToPlayerMessage(void *this, uint32_t nPlayerId, 
 
 void hook_NWSScriptVarTable__SetString(void *this, const char **varname, const char **value)
 {
-    if (strncmp(*varname, "NWNX!", 5))
+    if (!strncmp(*varname, "NWNX!", 5))
     {
         /// @todo NWNCX hooks.
     }
