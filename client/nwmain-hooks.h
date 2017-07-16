@@ -14,6 +14,8 @@ struct functions
     // Library functions called from nwmain
     void  (*SDL_GL_SwapBuffers)(void);
     void *(*SDL_SetVideoMode)(int width, int height, int bpp, uint32_t flags);
+    int   (*SDL_PeepEvents)(void *events, int numevents, unsigned action, uint32_t mask);
+    int   (*SDL_PollEvent)(void *event);
 
     // Functions defined in nwmain
     void (*CGuiMan__UpdateAndRender)(void* this, float delta);

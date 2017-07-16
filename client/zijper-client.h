@@ -46,6 +46,19 @@ void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy);
 extern uint32_t screen_width;
 extern uint32_t screen_height;
 
+struct input_data {
+    uint32_t mouse_x;
+    uint32_t mouse_y;
+
+    // Is the button currently pressed
+    uint8_t is_lmb_down;
+    uint8_t is_rmb_down;
+    // Was the button released this frame?
+    uint8_t was_lmb_up;
+    uint8_t was_rmb_up;
+};
+extern struct input_data input_data;
+
 //
 // Weak symbols used across modules
 //

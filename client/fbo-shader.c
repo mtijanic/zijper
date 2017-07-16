@@ -46,6 +46,12 @@ struct program
         GLuint elapsed_us; // Since last frame
         GLuint screen_width;
         GLuint screen_height;
+        GLuint mouse_x;
+        GLuint mouse_y;
+        GLuint is_lmb_down;
+        GLuint is_rmb_down;
+        GLuint was_lmb_up;
+        GLuint was_rmb_up;
     } uniform;
 };
 
@@ -141,6 +147,12 @@ static void fbo_alloc_program(struct program *program, const char *frag)
     program->uniform.elapsed_us    = glGetUniformLocation(program->program, "inElapsedUs");
     program->uniform.screen_width  = glGetUniformLocation(program->program, "inScreenWidth");
     program->uniform.screen_height = glGetUniformLocation(program->program, "inScreenHeight");
+    program->uniform.mouse_x       = glGetUniformLocation(program->program, "inMouseX");
+    program->uniform.mouse_y       = glGetUniformLocation(program->program, "inMouseY");
+    program->uniform.is_lmb_down   = glGetUniformLocation(program->program, "inIsLmbDown");
+    program->uniform.is_rmb_down   = glGetUniformLocation(program->program, "inIsRmbDown");
+    program->uniform.was_lmb_up    = glGetUniformLocation(program->program, "inIsLmbUp");
+    program->uniform.was_rmb_up    = glGetUniformLocation(program->program, "inIsRmbUp");
 }
 
 static void fbo_free_program(struct program *program)
@@ -202,6 +214,13 @@ static void draw_fbo_with_program(struct fbo *fbo, struct program *program)
     glUniform1i(program->uniform.elapsed_us,    framerate_microseconds_since_last_frame());
     glUniform1i(program->uniform.screen_width,  screen_width);
     glUniform1i(program->uniform.screen_height, screen_height);
+    glUniform1i(program->uniform.mouse_x,       input_data.mouse_x);
+    glUniform1i(program->uniform.mouse_y,       input_data.mouse_y);
+    glUniform1i(program->uniform.is_lmb_down,   input_data.is_lmb_down);
+    glUniform1i(program->uniform.is_rmb_down,   input_data.is_rmb_down);
+    glUniform1i(program->uniform.was_lmb_up,    input_data.was_lmb_up);
+    glUniform1i(program->uniform.was_rmb_up,    input_data.was_rmb_up);
+
 
     glEnableVertexAttribArray(program->attribute.texture_coord);
     glBindBuffer(GL_ARRAY_BUFFER, fbo->fbo);

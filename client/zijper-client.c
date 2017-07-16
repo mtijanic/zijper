@@ -18,6 +18,7 @@ FILE *logfile;
 
 uint32_t screen_width;
 uint32_t screen_height;
+struct input_data input_data;
 
 void zijper_client_initialize(void)
 {
