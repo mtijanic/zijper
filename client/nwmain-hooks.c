@@ -32,6 +32,7 @@ struct globals globals;
 void nwmain_hooks_initialize(void)
 {
     HOOK_LIBRARY_FUNCTION(SDL_GL_SwapBuffers);
+    HOOK_LIBRARY_FUNCTION(SDL_SetVideoMode);
 
     HOOK_NWMAIN_FUNCTION(CNWCMessage__HandleServerToPlayerMessage, 0x0815ed58);
     HOOK_NWMAIN_FUNCTION(CNWSMessage__SendServerToPlayerMessage,   0x083d58c4);
@@ -83,4 +84,14 @@ void SDL_GL_SwapBuffers(void)
     originals.SDL_GL_SwapBuffers();
     fbo_use(FBO_PRIMARY);
     framerate_notify_frame();
+}
+
+void *SDL_SetVideoMode(int width, int height, int bpp, uint32_t flags)
+{
+    fprintf(logfile, "%s(): width = %d, height = %d, bpp = %d, flags = %08x\n",
+        __FUNCTION__, width, height, bpp, flags);
+
+    screen_width = width;
+    screen_height = height;
+    return originals.SDL_SetVideoMode(width, height, bpp, flags);
 }

@@ -70,10 +70,6 @@ static const char passthrough_shader_name[] = "shaders/passthrough.frag";
 GLuint create_shader(const char* filename, GLenum type);
 char *print_log(GLuint object);
 
-/// @todo Get width/height dynamically
-GLsizei screen_width  = 1920;
-GLsizei screen_height = 1080;
-
 static void fbo_alloc(struct fbo *fbo)
 {
     glActiveTexture(GL_TEXTURE0);

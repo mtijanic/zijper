@@ -16,6 +16,9 @@ void zijper_client_shutdown(void)   __attribute__((destructor));
 
 FILE *logfile;
 
+uint32_t screen_width;
+uint32_t screen_height;
+
 void zijper_client_initialize(void)
 {
     if (logfile)
