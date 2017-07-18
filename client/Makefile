@@ -4,6 +4,9 @@ include ../common.mk
 SOURCES := $(wildcard *.c)
 HEADERS := $(wildcard *.h)
 
+# Allow disabling features from command line / environment
+SKIP_SOURCES ?=
+SOURCES := $(filter-out $(SKIP_SOURCES),$(SOURCES))
 
 CFLAGS += -m32 -fPIC -shared -Wall -Wextra -ggdb
 CFLAGS += -D_GNU_SOURCE
