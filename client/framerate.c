@@ -30,16 +30,15 @@ void framerate_notify_frame(void)
     }
     else
     {
-        frame_data.total_frames += frame_data.frames_this_second;
-
         if (frame_data.frames_this_second > MAX_FRAMES_PER_SECOND)
             frame_data.frames_this_second = MAX_FRAMES_PER_SECOND;
 
         frame_data.fps_histogram[frame_data.frames_this_second]++;
         frame_data.frames_this_second = 1;
-        frame_data.last_frame_time.seconds      = tv.tv_sec;
-        frame_data.last_frame_time.microseconds = tv.tv_usec;
     }
+    frame_data.total_frames++;
+    frame_data.last_frame_time.seconds      = tv.tv_sec;
+    frame_data.last_frame_time.microseconds = tv.tv_usec;
 }
 
 void framerate_print_report(FILE *f)

@@ -43,23 +43,24 @@ void nwmain_hooks_initialize(void)
 }
 
 
-
-#define INIT_GLOBAL(global, value)                                  \
-    do {                                                            \
-        ASSERT(globals.global == NULL || globals.global == value);  \
-        globals.global = value;                                     \
-    } while (0)
-
 int hook_CNWCMessage__HandleServerToPlayerMessage(void *this, uint8_t *buffer, uint32_t size)
 {
-    /// @todo Detect custom message to control shaders
-    INIT_GLOBAL(CNWCMessage, this);
-    return originals.CNWCMessage__HandleServerToPlayerMessage(this, buffer, size);
+    globals.CNWCMessage = this;
+    if (buffer[1] == EFFECT_CTL_MSG_MAJOR)
+    {
+        extern void effects_control(uint8_t cmd, const char *param);
+        effects_control(buffer[2], (char*)buffer+3);
+    }
+    else
+    {
+        return originals.CNWCMessage__HandleServerToPlayerMessage(this, buffer, size);
+    }
+    return 0;
 }
 
 void hook_CGuiMan__UpdateAndRender(void *this, float delta)
 {
-    INIT_GLOBAL(CGuiMan, this);
+    globals.CGuiMan = this;
     fbo_use(FBO_GUI);
     originals.CGuiMan__UpdateAndRender(this, delta);
     fbo_use(FBO_PRIMARY);
@@ -67,22 +68,33 @@ void hook_CGuiMan__UpdateAndRender(void *this, float delta)
 
 int hook_CNWSMessage__SendServerToPlayerMessage(void *this, uint32_t nPlayerId, uint8_t nMajor, uint8_t nMinor, uint8_t *pBuffer, uint32_t nBufferSize)
 {
-    INIT_GLOBAL(CNWSMessage, this);
+    globals.CNWSMessage = this;
     return originals.CNWSMessage__SendServerToPlayerMessage(this, nPlayerId, nMajor, nMinor, pBuffer, nBufferSize);
 }
 
-void hook_NWSScriptVarTable__SetString(void *this, const char **varname, const char **value)
+void hook_NWSScriptVarTable__SetString(void *this, CExoString *varname, CExoString *value)
 {
-    if (!strncmp(*varname, "NWNX!", 5))
+    if (!strncmp(varname->str, "NWNX!", 5))
     {
-        /// @todo NWNCX hooks.
+        const char *nwnx_function = varname->str + 5;
+        if (!strncmp(nwnx_function, "EFFECT_CTL!", strlen("EFFECT_CTL!")))
+        {
+            uint32_t cmd;
+            if (sscanf(nwnx_function, "EFFECT_CTL!%d", &cmd) == 1)
+            {
+                uint8_t buffer[256] = {'P', EFFECT_CTL_MSG_MAJOR, cmd, 0};
+                memcpy(&buffer[3], value->str, value->len);
+                originals.CNWSMessage__SendServerToPlayerMessage(
+                    globals.CNWSMessage, 0, EFFECT_CTL_MSG_MAJOR, cmd, buffer, 3+value->len);
+            }
+        }
     }
     return originals.NWSScriptVarTable__SetString(this, varname, value);
 }
 
 void SDL_GL_SwapBuffers(void)
 {
-    fbo_draw();
+    fbo_draw_all();
     originals.SDL_GL_SwapBuffers();
     fbo_use(FBO_PRIMARY);
     framerate_notify_frame();
@@ -137,7 +149,7 @@ static void update_input_data(void *sdl_event)
                 input_data.is_rmb_down = mouse_button_event->state;
                 input_data.was_rmb_up  = !mouse_button_event->state;
             }
-        break;
+            break;
         }
     }
 }

@@ -84,7 +84,7 @@ void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy)
 // If a C file is removed from compilation, the functions will be stubbed
 // and client will work without given functionality
 //
-__attribute__((weak)) void framerate_notify_frame(void)     { }
-__attribute__((weak)) void framerate_print_report(FILE *f)  { UNUSED(f); }
-__attribute__((weak)) void fbo_draw(void)                   { }
-__attribute__((weak)) void fbo_use(int i)                   { UNUSED(i); }
+__attribute__((weak)) void framerate_notify_frame(void)     { breakpoint(); }
+__attribute__((weak)) void framerate_print_report(FILE *f)  { breakpoint(); UNUSED(f); }
+__attribute__((weak)) void fbo_draw(void)                   { breakpoint(); }
+__attribute__((weak)) void fbo_use(int i)                   { breakpoint(); UNUSED(i); }

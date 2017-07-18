@@ -85,6 +85,6 @@ void framerate_print_report(FILE *f);
 #define FBO_PRIMARY 1
 #define FBO_GUI     2
 
-void fbo_draw(void);
+void fbo_draw_all(void);
 void fbo_use(int which);
 #endif // ZIJPER_CLIENT_H

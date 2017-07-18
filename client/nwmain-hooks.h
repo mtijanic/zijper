@@ -9,6 +9,15 @@
 #define ZIJPER_NWMAIN_HOOKS_H
 
 
+#define EFFECT_CTL_MSG_MAJOR 199
+
+typedef struct
+{
+    char *str;
+    uint32_t len;
+} CExoString;
+
+
 struct functions
 {
     // Library functions called from nwmain
@@ -21,7 +30,7 @@ struct functions
     void (*CGuiMan__UpdateAndRender)(void* this, float delta);
     int  (*CNWCMessage__HandleServerToPlayerMessage)(void *this, uint8_t *buffer, uint32_t size);
     int  (*CNWSMessage__SendServerToPlayerMessage)(void *this, uint32_t nPlayerId, uint8_t nMajor, uint8_t nMinor, uint8_t *pBuffer, uint32_t nBufferSize);
-    void (*NWSScriptVarTable__SetString)(void *this, const char **varname, const char **value);
+    void (*NWSScriptVarTable__SetString)(void *this, CExoString *varname, CExoString *value);
 };
 
 /// @brief Bypasses custom logic in the hooks

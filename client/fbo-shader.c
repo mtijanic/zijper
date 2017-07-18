@@ -4,79 +4,33 @@
  * @author  mtijanic
  * @license GPL-2.0
  */
-
 #include "zijper-client.h"
-
-#define GL_GLEXT_PROTOTYPES 1
-#include <GL/glew.h>
-#include <GL/glut.h>
-#include <GL/gl.h>
-#include <GL/glext.h>
-#include <GL/glcorearb.h>
+#include "fbo-shader.h"
 
 #include <string.h>
 
 static int fbo_initialized;
 
-struct fbo
-{
-    GLuint fbo;      // Framebuffer object
-    GLuint rbo;      // Depth renderbuffer
-    GLuint vbo;      // Vertices the FBO texture will be rendered on
-    GLuint texture;  // Texture of the FBO where everything is drawn to
-};
-
 struct fbo primary_fbo;
 struct fbo gui_fbo;
-
-struct program
-{
-    GLuint program;
-    GLuint fragment;
-
-    struct
-    {
-        GLuint texture_coord;
-    } attribute;
-    struct
-    {
-        GLuint texture;
-        GLuint frame_num;
-        GLuint seconds;  // Total system uptime
-        GLuint elapsed_us; // Since last frame
-        GLuint screen_width;
-        GLuint screen_height;
-        GLuint mouse_x;
-        GLuint mouse_y;
-        GLuint is_lmb_down;
-        GLuint is_rmb_down;
-        GLuint was_lmb_up;
-        GLuint was_rmb_up;
-    } uniform;
-};
 
 struct program first_pass_shader;
 struct program second_pass_shader;
 struct program passthrough_shader;
 
-
 /// @todo load from environment
 // The only thing vertex shader does is pass the coordinates to the fragment shader
 static GLuint vertex_shader;
-static const char vertex_shader_name[]   = "shaders/zijper.vert";
+static const char vertex_shader_name[]      = "shaders/zijper.vert";
 
-static const char common_shader_name[]     = "shaders/common.frag";
+static const char common_shader_name[]      = "shaders/common.frag";
 static GLuint common_shader;
 
 static const char first_pass_shader_name[]  = "shaders/first_pass.frag";
 static const char second_pass_shader_name[] = "shaders/second_pass.frag";
 static const char passthrough_shader_name[] = "shaders/passthrough.frag";
 
-// Utilities from openGL tutorials
-GLuint create_shader(const char* filename, GLenum type);
-char *print_log(GLuint object);
-
-static void fbo_alloc(struct fbo *fbo)
+void fbo_alloc(struct fbo *fbo)
 {
     glActiveTexture(GL_TEXTURE0);
     glGenTextures(1, &fbo->texture);
@@ -112,7 +66,7 @@ static void fbo_alloc(struct fbo *fbo)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-static void fbo_free(struct fbo *fbo)
+void fbo_free(struct fbo *fbo)
 {
     glDeleteRenderbuffers(1, &fbo->rbo);
     glDeleteTextures(1, &fbo->texture);
@@ -120,7 +74,7 @@ static void fbo_free(struct fbo *fbo)
     glDeleteBuffers(1, &fbo->vbo);
 }
 
-static void fbo_alloc_program(struct program *program, const char *frag)
+void fbo_alloc_program(struct program *program, const char *frag)
 {
     GLint status;
 
@@ -139,7 +93,7 @@ static void fbo_alloc_program(struct program *program, const char *frag)
     ASSERT(status != 0, "%s", print_log(program->program));
 
     program->attribute.texture_coord = glGetAttribLocation(program->program, "inTexCoord0");
-    ASSERT(program->attribute.texture_coord != ~0u);
+    ASSERT(program->attribute.texture_coord != ~0u, "%s", print_log(program->program));
 
     program->uniform.texture       = glGetUniformLocation(program->program, "inFboTexture");
     program->uniform.frame_num     = glGetUniformLocation(program->program, "inFrameNum");
@@ -155,7 +109,7 @@ static void fbo_alloc_program(struct program *program, const char *frag)
     program->uniform.was_rmb_up    = glGetUniformLocation(program->program, "inWasRmbUp");
 }
 
-static void fbo_free_program(struct program *program)
+void fbo_free_program(struct program *program)
 {
     glDetachShader(program->program, vertex_shader);
     glDetachShader(program->program, common_shader);
@@ -181,33 +135,33 @@ void fbo_init(void)
     fbo_alloc(&primary_fbo);
     fbo_alloc(&gui_fbo);
 
-    fbo_alloc_program(&first_pass_shader, first_pass_shader_name);
+    fbo_alloc_program(&first_pass_shader,  first_pass_shader_name);
     fbo_alloc_program(&second_pass_shader, second_pass_shader_name);
     fbo_alloc_program(&passthrough_shader, passthrough_shader_name);
 
+    effects_init();
     fbo_initialized = 1;
 }
 
 void fbo_destroy(void) __attribute__((destructor));
 void fbo_destroy(void)
 {
+    effects_destroy();
+
     fbo_free_program(&first_pass_shader);
+    fbo_free_program(&second_pass_shader);
     fbo_free_program(&passthrough_shader);
     fbo_free(&gui_fbo);
     fbo_free(&primary_fbo);
 
     glDeleteShader(vertex_shader);
+    glDeleteShader(common_shader);
 
     fbo_initialized = 0;
 }
 
-static void draw_fbo_with_program(struct fbo *fbo, struct program *program)
+void fbo_program_update_uniforms(struct program *program)
 {
-    //glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    glUseProgram(program->program);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fbo->texture);
-
     glUniform1i(program->uniform.texture,       GL_TEXTURE0);
     glUniform1i(program->uniform.frame_num,     frame_data.total_frames);
     glUniform1i(program->uniform.seconds,       frame_data.last_frame_time.seconds);
@@ -220,36 +174,48 @@ static void draw_fbo_with_program(struct fbo *fbo, struct program *program)
     glUniform1i(program->uniform.is_rmb_down,   input_data.is_rmb_down);
     glUniform1i(program->uniform.was_lmb_up,    input_data.was_lmb_up);
     glUniform1i(program->uniform.was_rmb_up,    input_data.was_rmb_up);
-
-
-    glEnableVertexAttribArray(program->attribute.texture_coord);
+}
+void fbo_prepare(struct fbo *fbo)
+{
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fbo->texture);
+}
+void fbo_draw(struct fbo *fbo, GLuint texture_coord)
+{
+    glEnableVertexAttribArray(texture_coord);
     glBindBuffer(GL_ARRAY_BUFFER, fbo->fbo);
-    glVertexAttribPointer(program->attribute.texture_coord, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(texture_coord, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glDisableVertexAttribArray(program->attribute.texture_coord);
+    glDisableVertexAttribArray(texture_coord);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-
-void fbo_draw(void)
+void fbo_draw_with_program(struct fbo *fbo, struct program *program)
 {
-    // @todo Maybe store the state here so it doesn't get corrupted?
-    //glPushAttrib(GL_ALL_ATTRIB_BITS);
-    //glPushMatrix();
+    glUseProgram(program->program);
+    fbo_prepare(fbo);
+    fbo_program_update_uniforms(program);
+    fbo_draw(fbo, program->attribute.texture_coord);
+}
+
+void fbo_draw_all(void)
+{
     if (!fbo_initialized)
         return;
 
     // First pass shader renders back to primary FBO, second pass renders to main FB.
     glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);
-    draw_fbo_with_program(&primary_fbo, &first_pass_shader);
+    fbo_draw_with_program(&primary_fbo, &first_pass_shader);
+
+    effects_apply(&primary_fbo);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    fbo_draw_with_program(&primary_fbo, &second_pass_shader);
 
-    draw_fbo_with_program(&primary_fbo, &second_pass_shader);
-
-    draw_fbo_with_program(&gui_fbo, &passthrough_shader);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    fbo_draw_with_program(&gui_fbo, &passthrough_shader);
 }
 
 void fbo_use(int which)
@@ -271,10 +237,17 @@ void fbo_use(int which)
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
           break;
         default:
-            ASSERT(0, "%d", which);
+            ASSERT(!"Invalid FBO specified", "%d", which);
           break;
     }
     glUseProgram(0); // Restore fixed function pipeline
-    //glPopMatrix();
-    //glPopAttrib();
 }
+
+
+//
+// Weak symbols if effects are not linked in
+//
+__attribute__((weak)) void effects_init(void)                          { breakpoint(); }
+__attribute__((weak)) void effects_destroy(void)                       { breakpoint(); }
+__attribute__((weak)) void effects_apply(struct fbo *fbo)              { breakpoint(); UNUSED(fbo); }
+__attribute__((weak)) void effects_control(uint8_t cmd, const char *p) { breakpoint(); UNUSED(cmd); UNUSED(p); }
