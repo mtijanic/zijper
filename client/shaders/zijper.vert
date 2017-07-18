@@ -1,4 +1,5 @@
 attribute vec2 inTexCoord0;
+uniform sampler2D inFboTexture;
 varying vec2 fragTexCoord0;
 
 void main(void) {
