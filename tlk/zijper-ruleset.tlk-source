@@ -1,0 +1,389 @@
+[200000]Text:	Zijper ruleset
+[200001]Text:	Beastman
+[200002]Text:	Beastman
+[200003]Text:	beastman
+[200004]Text:	Beastmen
+[200005]Text:	Description:Beastman
+[200006]Text:	Biography:Beastman
+[200011]Text:	Fae
+[200012]Text:	Fae
+[200013]Text:	fae
+[200014]Text:	Faen
+[200015]Text:	Description:Fae
+[200016]Text:	Biography:Fae
+[200021]Text:	Gith
+[200022]Text:	Gith
+[200023]Text:	gith
+[200024]Text:	Gith
+[200025]Text:	Description:Gith
+[200026]Text:	Biography:Gith
+[200031]Text:	Eternal
+[200032]Text:	Eternal
+[200033]Text:	eternal
+[200034]Text:	Eternals
+[200035]Text:	Description:Eternal
+[200036]Text:	Biography:Eternal
+[200041]Text:	Quall
+[200042]Text:	Quall
+[200043]Text:	quall
+[200044]Text:	Qualls
+[200045]Text:	Description:Quall
+[200046]Text:	Biography:Quall
+[200051]Text:	Orokuen
+[200052]Text:	Orokuen
+[200053]Text:	orokuen
+[200054]Text:	Orokuen
+[200055]Text:	Description:Orokuen
+[200056]Text:	Biography:Orokuen
+[200061]Text:	Human
+[200062]Text:	Human
+[200063]Text:	human
+[200064]Text:	Humans
+[200065]Text:	Description:Human
+[200066]Text:	Biography:Human
+[200100]Text:	Arcana - Primal
+[200101]Text:	Concentration
+[200102]Text:	Mechanics
+[200103]Text:	Defense
+[200104]Text:	Medicine
+[200105]Text:	Stealth
+[200106]Text:	XXX_Listen
+[200107]Text:	Knowledge
+[200108]Text:	XXX_MoveSilently
+[200109]Text:	XXX_OpenLock
+[200110]Text:	Combat - Single Weapon
+[200111]Text:	Performing
+[200112]Text:	Speechcraft
+[200113]Text:	Sleight Of Hand
+[200114]Text:	XXX_Search
+[200115]Text:	XXX_SetTrap
+[200116]Text:	Arcana - Chaos
+[200117]Text:	Awareness
+[200118]Text:	Tactics
+[200119]Text:	Arcana - Alchemy
+[200120]Text:	Bartering
+[200121]Text:	Athletics
+[200122]Text:	Survival
+[200123]Text:	Combat - Marksmanship
+[200124]Text:	Arcana - Theurgy
+[200125]Text:	Combat - Throwing
+[200126]Text:	Arcana - Wyrd
+[200127]Text:	Riding
+[200128]Text:	Combat - Dual Wielding
+[200129]Text:	Combat - Two Handed Weapons
+[200130]Text:	Combat - Shield Style
+[200131]Text:	Combat - Unarmed
+[200200]Text:	Description:ArcanaPrimal
+[200201]Text:	Description:Concentration
+[200202]Text:	Description:Mechanics
+[200203]Text:	Description:Defense
+[200204]Text:	Description:Medicine
+[200205]Text:	Description:Stealth
+[200206]Text:	Description:XXX_Listen
+[200207]Text:	Description:Knowledge
+[200208]Text:	Description:XXX_MoveSilently
+[200209]Text:	Description:XXX_OpenLock
+[200210]Text:	Description:MeleeSingle
+[200211]Text:	Description:Performing
+[200212]Text:	Description:Speechcraft
+[200213]Text:	Description:SleightOfHand
+[200214]Text:	Description:XXX_Search
+[200215]Text:	Description:XXX_SetTrap
+[200216]Text:	Description:ArcanaChaos
+[200217]Text:	Description:Awareness
+[200218]Text:	Description:Tactics
+[200219]Text:	Description:ArcanaAlchemy
+[200220]Text:	Description:Bartering
+[200221]Text:	Description:Athletics
+[200222]Text:	Description:Survival
+[200223]Text:	Description:Marksmanship
+[200224]Text:	Description:ArcanaTheurgy
+[200225]Text:	Description:Throwing
+[200226]Text:	Description:ArcanaWyrd
+[200227]Text:	Description:Riding
+[200228]Text:	Description:MeleeDual
+[200229]Text:	Description:MeleeTwoHanded
+[200230]Text:	Description:MeleeShield
+[200231]Text:	Description:MeleeUnarmed
+[200500]Text:	Adventurer
+[200501]Text:	Adventurers
+[200502]Text:	adventurer
+[200503]Text:	DESCRIPTION:Adventurer
+[200510]Text:	Alchemist
+[200511]Text:	Alchemists
+[200512]Text:	alchemist
+[200513]Text:	DESCRIPTION:Alchemist
+[200520]Text:	Architect
+[200521]Text:	Architects
+[200522]Text:	architect
+[200523]Text:	DESCRIPTION:Architect
+[200530]Text:	Assassin
+[200531]Text:	Assassins
+[200532]Text:	assassin
+[200533]Text:	DESCRIPTION:Assassin
+[200540]Text:	Baker
+[200541]Text:	Bakers
+[200542]Text:	baker
+[200543]Text:	DESCRIPTION:Baker
+[200550]Text:	Bartender
+[200551]Text:	Bartenders
+[200552]Text:	bartender
+[200553]Text:	DESCRIPTION:Bartender
+[200560]Text:	Beggar
+[200561]Text:	Beggars
+[200562]Text:	beggar
+[200563]Text:	DESCRIPTION:Beggar
+[200570]Text:	Blacksmith
+[200571]Text:	Blacksmiths
+[200572]Text:	blacksmith
+[200573]Text:	DESCRIPTION:Blacksmith
+[200580]Text:	Builder
+[200581]Text:	Builders
+[200582]Text:	builder
+[200583]Text:	DESCRIPTION:Builder
+[200590]Text:	Carpenter
+[200591]Text:	Carpenters
+[200592]Text:	carpenter
+[200593]Text:	DESCRIPTION:Carpenter
+[200600]Text:	Convict
+[200601]Text:	Convicts
+[200602]Text:	convict
+[200603]Text:	DESCRIPTION:Convict
+[200610]Text:	Diplomat
+[200611]Text:	Diplomats
+[200612]Text:	diplomat
+[200613]Text:	DESCRIPTION:Diplomat
+[200620]Text:	Engineer
+[200621]Text:	Engineers
+[200622]Text:	engineer
+[200623]Text:	DESCRIPTION:Engineer
+[200630]Text:	Farmer
+[200631]Text:	Farmers
+[200632]Text:	farmer
+[200633]Text:	DESCRIPTION:Farmer
+[200640]Text:	Fletcher
+[200641]Text:	Fletchers
+[200642]Text:	fletcher
+[200643]Text:	DESCRIPTION:Fletcher
+[200650]Text:	Gambler
+[200651]Text:	Gamblers
+[200652]Text:	gambler
+[200653]Text:	DESCRIPTION:Gambler
+[200660]Text:	Guard
+[200661]Text:	Guards
+[200662]Text:	guard
+[200663]Text:	DESCRIPTION:Guard
+[200670]Text:	Harborman
+[200671]Text:	Harbormans
+[200672]Text:	harborman
+[200673]Text:	DESCRIPTION:Harborman
+[200680]Text:	Healer
+[200681]Text:	Healers
+[200682]Text:	healer
+[200683]Text:	DESCRIPTION:Healer
+[200690]Text:	Herbalist
+[200691]Text:	Herbalists
+[200692]Text:	herbalist
+[200693]Text:	DESCRIPTION:Herbalist
+[200700]Text:	Historian
+[200701]Text:	Historians
+[200702]Text:	historian
+[200703]Text:	DESCRIPTION:Historian
+[200710]Text:	Jeweler
+[200711]Text:	Jewelers
+[200712]Text:	jeweler
+[200713]Text:	DESCRIPTION:Jeweler
+[200720]Text:	Lawyer
+[200721]Text:	Lawyers
+[200722]Text:	lawyer
+[200723]Text:	DESCRIPTION:Lawyer
+[200730]Text:	Mercenery
+[200731]Text:	Mercenerys
+[200732]Text:	mercenery
+[200733]Text:	DESCRIPTION:Mercenery
+[200740]Text:	Merchant
+[200741]Text:	Merchants
+[200742]Text:	merchant
+[200743]Text:	DESCRIPTION:Merchant
+[200750]Text:	Messenger
+[200751]Text:	Messengers
+[200752]Text:	messenger
+[200753]Text:	DESCRIPTION:Messenger
+[200760]Text:	Murderer
+[200761]Text:	Murderers
+[200762]Text:	murderer
+[200763]Text:	DESCRIPTION:Murderer
+[200770]Text:	Musician
+[200771]Text:	Musicians
+[200772]Text:	musician
+[200773]Text:	DESCRIPTION:Musician
+[200780]Text:	Mystic
+[200781]Text:	Mystics
+[200782]Text:	mystic
+[200783]Text:	DESCRIPTION:Mystic
+[200790]Text:	Officer
+[200791]Text:	Officers
+[200792]Text:	officer
+[200793]Text:	DESCRIPTION:Officer
+[200800]Text:	Painter
+[200801]Text:	Painters
+[200802]Text:	painter
+[200803]Text:	DESCRIPTION:Painter
+[200810]Text:	Philosopher
+[200811]Text:	Philosophers
+[200812]Text:	philosopher
+[200813]Text:	DESCRIPTION:Philosopher
+[200820]Text:	Prostitute
+[200821]Text:	Prostitutes
+[200822]Text:	prostitute
+[200823]Text:	DESCRIPTION:Prostitute
+[200830]Text:	Sailor
+[200831]Text:	Sailors
+[200832]Text:	sailor
+[200833]Text:	DESCRIPTION:Sailor
+[200840]Text:	Scientist
+[200841]Text:	Scientists
+[200842]Text:	scientist
+[200843]Text:	DESCRIPTION:Scientist
+[200850]Text:	Scribe
+[200851]Text:	Scribes
+[200852]Text:	scribe
+[200853]Text:	DESCRIPTION:Scribe
+[200860]Text:	Servant
+[200861]Text:	Servants
+[200862]Text:	servant
+[200863]Text:	DESCRIPTION:Servant
+[200870]Text:	Singer
+[200871]Text:	Singers
+[200872]Text:	singer
+[200873]Text:	DESCRIPTION:Singer
+[200880]Text:	Smuggler
+[200881]Text:	Smugglers
+[200882]Text:	smuggler
+[200883]Text:	DESCRIPTION:Smuggler
+[200890]Text:	Soldier
+[200891]Text:	Soldiers
+[200892]Text:	soldier
+[200893]Text:	DESCRIPTION:Soldier
+[200900]Text:	Squire
+[200901]Text:	Squires
+[200902]Text:	squire
+[200903]Text:	DESCRIPTION:Squire
+[200910]Text:	Tailor
+[200911]Text:	Tailors
+[200912]Text:	tailor
+[200913]Text:	DESCRIPTION:Tailor
+[200920]Text:	Tanner
+[200921]Text:	Tanners
+[200922]Text:	tanner
+[200923]Text:	DESCRIPTION:Tanner
+[200930]Text:	Teacher
+[200931]Text:	Teachers
+[200932]Text:	teacher
+[200933]Text:	DESCRIPTION:Teacher
+[200940]Text:	Theologist
+[200941]Text:	Theologists
+[200942]Text:	theologist
+[200943]Text:	DESCRIPTION:Theologist
+[200950]Text:	Thespian
+[200951]Text:	Thespians
+[200952]Text:	thespian
+[200953]Text:	DESCRIPTION:Thespian
+[200960]Text:	Thief
+[200961]Text:	Thieves
+[200962]Text:	thief
+[200963]Text:	DESCRIPTION:Thief
+[200970]Text:	Undertaker
+[200971]Text:	Undertakers
+[200972]Text:	undertaker
+[200973]Text:	DESCRIPTION:Undertaker
+[200980]Text:	Writer
+[200981]Text:	Writers
+[200982]Text:	writer
+[200983]Text:	DESCRIPTION:Writer
+[200990]Text:	Forester
+[200991]Text:	Foresters
+[200992]Text:	forester
+[200993]Text:	DESCRIPTION:Forester
+[201000]Text:	Clergy
+[201001]Text:	Clergy
+[201002]Text:	clergy
+[201003]Text:	DESCRIPTION:Clergy
+[202000]Text:	Ambition: Fame
+[202001]Text:	Ambition: Fortune
+[202002]Text:	Ambition: Infamy
+[202003]Text:	Ambition: Power
+[202004]Text:	Ambition: Honor
+[202005]Text:	Ambition: Immortality
+[202006]Text:	Ambition: Altruism
+[202007]Text:	Ambition: Preaching
+[202008]Text:	Ambition: Knowledge
+[202009]Text:	Ambition: Excellence
+[202010]Text:	Ambition: Supremacy
+[202011]Text:	Ambition: Genocide
+[202012]Text:	Ambition: Torture
+[202013]Text:	Ambition: Sex
+[202014]Text:	Ambition: Fun
+[202015]Text:	Ambition: Exploration
+[202016]Text:	Ambition: Colonization
+[202017]Text:	Ambition: Progress
+[202018]Text:	Ambition: Anarchy
+[202019]Text:	Ambition: Regress
+[202020]Text:	Ambition: Equality
+[202021]Text:	Ambition: Love
+[202100]Text:	Description:Ambition: Fame
+[202101]Text:	Description:Ambition: Fortune
+[202102]Text:	Description:Ambition: Infamy
+[202103]Text:	Description:Ambition: Power
+[202104]Text:	Description:Ambition: Honor
+[202105]Text:	Description:Ambition: Immortality
+[202106]Text:	Description:Ambition: Altruism
+[202107]Text:	Description:Ambition: Preaching
+[202108]Text:	Description:Ambition: Knowledge
+[202109]Text:	Description:Ambition: Excellence
+[202110]Text:	Description:Ambition: Supremacy
+[202111]Text:	Description:Ambition: Genocide
+[202112]Text:	Description:Ambition: Torture
+[202113]Text:	Description:Ambition: Sex
+[202114]Text:	Description:Ambition: Fun
+[202115]Text:	Description:Ambition: Exploration
+[202116]Text:	Description:Ambition: Colonization
+[202117]Text:	Description:Ambition: Progress
+[202118]Text:	Description:Ambition: Anarchy
+[202119]Text:	Description:Ambition: Regress
+[202120]Text:	Description:Ambition: Equality
+[202121]Text:	Description:Ambition: Love
+[202200]Text:	Trait: Absent Minded
+[202201]Text:	Trait: Aggressive
+[202202]Text:	Trait: Cautious
+[202203]Text:	Trait: Impatient
+[202204]Text:	Trait: Distinctive
+[202205]Text:	Trait: Farsighted
+[202206]Text:	Trait: Nearsighted
+[202207]Text:	Trait: Hard Of Hearing
+[202208]Text:	Trait: Focused
+[202209]Text:	Trait: Illiterate
+[202210]Text:	Trait: Reckless
+[202211]Text:	Trait: Relentless
+[202212]Text:	Trait: Civilized
+[202213]Text:	Trait: Savage
+[202214]Text:	Trait: Attractive
+[202215]Text:	Trait: Lucky
+[202216]Text:	Trait: Rich
+[202300]Text:	You are fascinated by knowledge and learning and are capable of pursuing complex trains of thought quite quickly. However, your preoccupation with such thoughts makes you a little less aware of your surroundings.
+[202301]Text:	You are quick to initiate combat, and you tend to press the attack once battle is joined. You are quick to anger and deadly when angered.
+[202302]Text:	You are cautious in combat, even a bit cowardly, and you take more care to defend yourself than others.
+[202303]Text:	You are skilled at finishing simple tasks quickly, but you have a difficult time dealing with longer, more complex tasks.
+[202304]Text:	You have some distinctive physical feature such as a scar, a prominent nose, a limp, or some similar characteristic that is hard to disguise or conceal. It is easy to recognize you by description alone.
+[202305]Text:	You have difficulty focusing on nearby objects, but your distance vision is more keen than normal.
+[202306]Text:	You have difficulty focusing on distant objects, but your eye for detail is more keen than normal.
+[202307]Text:	You have a slight hearing impairment, and to compensate, you have become more in tune with your other senses.
+[202308]Text:	You can keep your attention on a task despite many distractions; however, events in the background pass you by.
+[202309]Text:	You cannot read, but you have devoted yourself to learning other skills.
+[202310]Text:	You have a tendency for rash behavior, often disregarding your own safety to attain your goals.
+[202311]Text:	You don't know the meaning of the word "tired." You go all out until you simply can't continue.
+[202312]Text:	You are courteous and well spoken, and are well versed in the local laws, customs, and politics.
+[202313]Text:	You were born and raised in untamed lands far from civilization. You learned to survive in the elements among brutal men and beasts.
+[202314]Text:	You have been blessed with good looks.
+[202315]Text:	You are inexplicably lucky. Good things tend to happen to you more often than to others.
+[202316]Text:	You were born into a rich family, perhaps even the nobility.
