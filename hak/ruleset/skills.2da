@@ -1,0 +1,35 @@
+2DA V2.0
+
+    Label              Name      Description  Icon            Untrained  KeyAbility  ArmorCheckPenalty  AllClassesCanUse  Category  MaxCR  Constant                HostileSkill
+0   ArcanaPrimal       200100    200200       I_SK_A_PRIMAL    0          CHA         0                  1                 ****      ****   SKILL_ARCANA_PRIMAL    1
+1   Concentration      200101    200201       I_SK_CONCENTRATI 1          CON         0                  1                 ****      ****   SKILL_CONCENTRATION    0
+2   Mechanics          200102    200202       I_SK_MECHANICS   0          INT         1                  1                 ****      ****   SKILL_MECHANICS        0
+3   Defense            200103    200203       I_SK_DEFENSE     1          STR         0                  1                 ****      ****   SKILL_DEFENSE          0
+4   Medicine           200104    200204       I_SK_MEDICINE    0          WIS         1                  1                 ****      ****   SKILL_MEDICINE         0
+5   Stealth            200105    200205       I_SK_STEALTH     1          DEX         1                  1                 ****      ****   SKILL_STEALTH          0
+6   XXX_Listen         200106    200206       I_BLANK          1          WIS         0                  0                 ****      ****   SKILL_XXX_LISTEN       0
+7   Knowledge          200107    200207       I_SK_KNOWLEDGE   1          INT         0                  1                 ****      ****   SKILL_KNOWLEDGE        0
+8   XXX_MoveSilently   200108    200208       I_BLANK          1          DEX         1                  0                 ****      ****   SKILL_XXX_MOVESILENTLY 0
+9   XXX_OpenLock       200109    200209       I_BLANK          0          DEX         1                  0                 ****      ****   SKILL_XXX_OPENLOCK     0
+10  MeleeSingle        200110    200210       I_SK_M_SINGLE    1          DEX         1                  1                 ****      ****   SKILL_MELEE_SINGLE     0
+11  Performing         200111    200211       I_SK_PERFORMING  1          CHA         1                  1                 ****      ****   SKILL_PERFORMING       0
+12  Speechcraft        200112    200212       I_SK_SPEECHCRAFT 1          CHA         0                  1                 ****      ****   SKILL_SPEECHCRAFT      0
+13  SleightOfHand      200113    200213       I_SK_SLEIGHTOFHA 1          DEX         1                  1                 ****      ****   SKILL_SLEIGHTOFHAND    0
+14  XXX_Search         200114    200214       I_BLANK          1          INT         0                  0                 ****      ****   SKILL_XXX_SEARCH       0
+15  XXX_SetTrap        200115    200215       I_BLANK          0          DEX         1                  0                 ****      ****   SKILL_XXX_SETTRAP      0
+16  ArcanaChaos        200116    200216       I_SK_A_CHAOS     0          INT         0                  1                 ****      ****   SKILL_ARCANA_CHAOS     0
+17  Awareness          200117    200217       I_SK_AWARENESS   1          WIS         0                  1                 ****      ****   SKILL_AWARENESS        0
+18  Tactics            200118    200218       I_SK_TACTICS     1          INT         0                  1                 ****      ****   SKILL_TACTICS          1
+19  ArcanaAlchemy      200119    200219       I_SK_A_ALCHEMY   0          INT         1                  1                 ****      ****   SKILL_ARCANA_ALCHEMY   0
+20  Bartering          200120    200220       I_SK_BARTERING   1          CHA         0                  1                 ****      ****   SKILL_BARTERING        0
+21  Athletics          200121    200221       I_SK_ATHLETICS   1          DEX         1                  1                 ****      ****   SKILL_ATHLETICS        0
+22  Survival           200122    200222       I_SK_SURVIVAL    1          WIS         0                  1                 ****      ****   SKILL_SURVIVAL         0
+23  Marksmanship       200123    200223       I_SK_MARKSMANSHI 1          DEX         1                  1                 ****      ****   SKILL_MARKSMANSHIP     0
+24  ArcanaTheurgy      200124    200224       I_SK_A_THEURGY   0          CHA         0                  1                 ****      ****   SKILL_ARCANA_THEURGY   0
+25  Throwing           200125    200225       I_SK_THROWING    1          DEX         1                  1                 ****      ****   SKILL_THROWING         0
+26  ArcanaWyrd         200126    200226       I_SK_A_WYRD      1          INT         1                  1                 ****      ****   SKILL_ARCANA_WYRD      0
+27  Riding             200127    200227       I_SK_RIDING      1          DEX         1                  1                 ****      ****   SKILL_RIDING           0
+28  MeleeDual          200128    200228       I_SK_M_DUAL      1          DEX         1                  1                 ****      ****   SKILL_MELEE_DUAL       0
+29  MeleeTwoHanded     200129    200229       I_SK_M_TWOHANDED 1          STR         1                  1                 ****      ****   SKILL_MELEE_TWOHANDED  0
+30  MeleeShield        200130    200230       I_SK_M_SHIELD    1          CON         0                  1                 ****      ****   SKILL_MELEE_SHIELD     0
+31  MeleeUnarmed       200131    200231       I_SK_M_UNARMED   1          DEX         1                  1                 ****      ****   SKILL_MELEE_UNARMED    0
