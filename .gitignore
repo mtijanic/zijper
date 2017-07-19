@@ -1,4 +1,5 @@
 *_out/*
+*/_out/*
 *.sublime-project
 *.sublime-workspace
 *.bak
