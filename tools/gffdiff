@@ -1,0 +1,14 @@
+#!/bin/sh
+OPT="-d"
+
+for f in $@; do
+	B=`basename $f`
+
+	if [ ! -e $B ]; then
+		echo "File $B is new."
+		continue
+	fi
+
+	gffcmp.pl $OPT "$f" "$B" 2>&1 | grep -v "uninitialized";
+done
+

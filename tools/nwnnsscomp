@@ -1,0 +1,18 @@
+#!/bin/bash
+
+comp=""
+case `uname` in
+	"Darwin")
+		comp="osx"
+		;;
+	"Linux")
+		comp="lin"
+		;;
+	*)
+		echo "Cannot determine OS for compiler"
+		exit 1
+esac
+
+comp="nwnnsscomp_$comp"
+
+$(dirname "$0")/$comp $@

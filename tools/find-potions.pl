@@ -1,0 +1,278 @@
+#!/usr/bin/env perl 
+# -*- perl -*-
+######################################################################
+# find-potions.pl -- Find potion uti's
+# Copyright (c) 2004 Tero Kivinen
+# All Rights Reserved.
+######################################################################
+#         Program: find-potions.pl
+#	  $Source: /u/samba/nwn/bin/RCS/find-potions.pl,v $
+#	  Author : $Author: kivinen $
+#
+#	  (C) Tero Kivinen 2004 <kivinen@iki.fi>
+#
+#	  Creation          : 12:22 Sep  4 2004 kivinen
+#	  Last Modification : 01:24 May 24 2007 kivinen
+#	  Last check in     : $Date: 2007/05/23 22:24:13 $
+#	  Revision number   : $Revision: 1.2 $
+#	  State             : $State: Exp $
+#	  Version	    : 1.56
+#	  Edit time	    : 43 min
+#
+#	  Description       : Find potion uti's and generate if/else 
+#			      code selecting right base strref for potion
+#
+#	  $Log: find-potions.pl,v $
+#	  Revision 1.2  2007/05/23 22:24:13  kivinen
+#	  	Fixed path splitting to accept windows paths.
+#
+#	  Revision 1.1  2004/09/20 11:46:50  kivinen
+#	  	Created.
+#
+#	  $EndLog$
+#
+#
+#
+######################################################################
+# initialization
+
+require 5.6.0;
+package FindPotions;
+use strict;
+use Getopt::Long;
+use File::Glob ':glob';
+use Gff;
+use GffRead;
+use Time::HiRes qw(time);
+
+$Opt::verbose = 0;
+
+######################################################################
+# Get version information
+
+open(PROGRAM, "<$0") || die "Cannot open myself from $0 : $!";
+undef $/;
+$Prog::program = <PROGRAM>;
+$/ = "\n";
+close(PROGRAM);
+if ($Prog::program =~ /\$revision:\s*([\d.]*)\s*\$/i) {
+    $Prog::revision = $1;
+} else {
+    $Prog::revision = "?.?";
+}
+
+if ($Prog::program =~ /version\s*:\s*([\d.]*\.)*([\d]*)\s/mi) {
+    $Prog::save_version = $2;
+} else {
+    $Prog::save_version = "??";
+}
+
+if ($Prog::program =~ /edit\s*time\s*:\s*([\d]*)\s*min\s*$/mi) {
+    $Prog::edit_time = $1;
+} else {
+    $Prog::edit_time = "??";
+}
+
+$Prog::version = "$Prog::revision.$Prog::save_version.$Prog::edit_time";
+$Prog::progname = $0;
+$Prog::progname =~ s/^.*[\/\\]//g;
+
+$| = 1;
+
+######################################################################
+# Read rc-file
+
+if (defined($ENV{'HOME'})) {
+    read_rc_file("$ENV{'HOME'}/.findpotionsrc");
+}
+
+######################################################################
+# Option handling
+
+Getopt::Long::Configure("no_ignore_case");
+
+if (!GetOptions("config=s" => \$Opt::config,
+		"verbose|v+" => \$Opt::verbose,
+		"help|h" => \$Opt::help,
+		"version|V" => \$Opt::version) || defined($Opt::help)) {
+    usage();
+}
+
+if (defined($Opt::version)) {
+    print("\u$Prog::progname version $Prog::version by Tero Kivinen.\n");
+    exit(0);
+}
+
+while (defined($Opt::config)) {
+    my($tmp);
+    $tmp = $Opt::config;
+    undef $Opt::config;
+    if (-f $tmp) {
+	read_rc_file($tmp);
+    } else {
+	die "Config file $Opt::config not found: $!";
+    }
+}
+
+######################################################################
+# Main loop
+
+$| = 1;
+
+my($i, $t0, %potion);
+
+if (join(";", @ARGV) =~ /[*?]/) {
+    my(@argv);
+    foreach $i (@ARGV) {
+	push(@argv, bsd_glob($i));
+    }
+    @ARGV = @argv;
+}
+
+foreach $i (@ARGV) {
+    my($gff);
+    $t0 = time();
+    if ($Opt::verbose > 2) {
+	print("Reading file $i...\n");
+    }
+    $gff = GffRead::read(filename => $i);
+    if ($Opt::verbose > 3) {
+	printf("Read done, %g seconds\n", time() - $t0);
+    }
+    if (match_value($i, $gff, "BaseItem", 49) &&
+#	match_value($i, $gff, "AddCost", 0) &&
+	match_value($i, $gff, "Charges", 0) &&
+	match_value($i, $gff, "Plot", 0) &&
+	match_value($i, $gff, "StackSize", 1) &&
+	match_value($i, $gff, "Stolen", 0)) {
+	my($prop, $spell, $resref, $name);
+	if ($Opt::verbose > 1) {
+	    printf("$i matched for base checks\n");
+	}
+	if (!defined($$gff{PropertiesList}) ||
+	    $#{$$gff{PropertiesList}} != 0) {
+	    warn "No property list or multiple properties : $i";
+	    next;
+	}
+	$prop = Gff->new($$gff{PropertiesList}[0]);
+	if (match_value($i, $prop, "PropertyName", 15) &&
+	    match_value($i, $prop, "CostTable", 3) &&
+	    match_value($i, $prop, "CostValue", 1) &&
+#	    match_value($i, $prop, "Param1", 255, 1) &&
+#	    match_value($i, $prop, "Param1Value", 255, 1) &&
+	    match_value($i, $prop, "ChanceAppear", 100)) {
+	    $spell = $$prop{Subtype};
+	    next if ($spell == 329 ||
+		     $spell == 335);
+	    $resref = $$gff{TemplateResRef};
+	    $name = undef;
+	    if (defined($$gff{LocalizedName})) {
+		$name = $$gff{LocalizedName}{0};
+	    }
+	    $name = "" if (!defined($name));
+	    if ($Opt::verbose) {
+		print("Found potion for spell $spell, resref = $resref " .
+		       "name = $name\n");
+	    }
+	    if (defined($potion{$spell})) {
+		warn "Duplicate potion for spell $spell : $resref vs $potion{$spell}";
+	    } else {
+		$potion{$spell} = $resref;
+	    }
+	}
+    }
+}
+
+print("// This file is automatically generated by find-potions.pl
+// DO NOT EDIT
+
+string ZtkPropIDToPotionResRef(int iPropID)
+{
+    string sTag;
+
+   ");
+foreach $i (sort { $a <=> $b } keys %potion) {
+    print(" if (iPropID == $i) { sTag = \"$potion{$i}\"; }\n    else ");
+}
+print(" { sTag = \"ztk_cg_pot_\" + IntToString(iPropID % 13); }
+    return sTag;
+}
+");
+
+exit 0;
+
+######################################################################
+# $found = match_value($file, $gff, $label, $value, $warn_if_no_match)
+
+sub match_value {
+    my($file, $gff, $label, $value, $warn_if_no_match) = @_;
+
+    if (!defined($$gff{$label})) {
+	warn "File $file has no label $label";
+	return 0;
+    }
+    if ($$gff{$label} eq $value) {
+	return 1;
+    }
+    if ($warn_if_no_match) {
+	warn "File $file label $label = $$gff{$label}, does not match $label";
+    }
+    return 0;
+}
+
+######################################################################
+# Read rc file
+
+sub read_rc_file {
+    my($file) = @_;
+    my($next, $space);
+    
+    if (open(RCFILE, "<$file")) {
+	while (<RCFILE>) {
+	    chomp;
+	    while (/\\$/) {
+		$space = 0;
+		if (/\s+\\$/) {
+		    $space = 1;
+		}
+		s/\s*\\$//g;
+		$next = <RCFILE>;
+		chomp $next;
+		if ($next =~ s/^\s+//g) {
+		    $space = 1;
+		}
+		if ($space) {
+		    $_ .= " " . $next;
+		} else {
+		    $_ .= $next;
+		}
+	    }
+	    if (/^\s*([a-zA-Z0-9_]+)\s*$/) {
+		eval('$Opt::' . lc($1) . ' = 1;');
+	    } elsif (/^\s*([a-zA-Z0-9_]+)\s*=\s*\"([^\"]*)\"\s*$/) {
+		my($key, $value) = ($1, $2);
+		$value =~ s/\\n/\n/g;
+		$value =~ s/\\t/\t/g;
+		eval('$Opt::' . lc($key) . ' = $value;');
+	    } elsif (/^\s*([a-zA-Z0-9_]+)\s*=\s*(.*)\s*$/) {
+		my($key, $value) = ($1, $2);
+		$value =~ s/\\n/\n/g;
+		$value =~ s/\\t/\t/g;
+		eval('$Opt::' . lc($key) . ' = $value;');
+	    }
+	}
+	close(RCFILE);
+    }
+}
+
+
+######################################################################
+# Usage
+
+sub usage {
+    print("Usage: $Prog::progname [--help] [--version] ".
+	  "\n\t[--verbose|-v] " .
+	  "\n\t[--config config-file] " .
+	  "\n\tfilename ...\n");
+    exit(0);
+}
