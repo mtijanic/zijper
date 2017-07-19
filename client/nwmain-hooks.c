@@ -161,7 +161,7 @@ int SDL_PeepEvents(void *events, int numevents, unsigned action, uint32_t mask)
     if (action != 0) // Not SDL_ADDEVENT
     {
         for (int i = 0; i < numevents; i++)
-            update_input_data(events + i*56);
+            update_input_data(events + i*16);
     }
     return r;
 }

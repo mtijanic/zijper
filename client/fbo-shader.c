@@ -30,6 +30,9 @@ static const char first_pass_shader_name[]  = "shaders/first_pass.frag";
 static const char second_pass_shader_name[] = "shaders/second_pass.frag";
 static const char passthrough_shader_name[] = "shaders/passthrough.frag";
 
+/// @todo Get from environment. For now, controlled by debugger only
+int fbo_skip_first_pass;
+
 void fbo_alloc(struct fbo *fbo)
 {
     glActiveTexture(GL_TEXTURE0);
@@ -205,7 +208,9 @@ void fbo_draw_all(void)
 
     // First pass shader renders back to primary FBO, second pass renders to main FB.
     glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);
-    fbo_draw_with_program(&primary_fbo, &first_pass_shader);
+
+    if (!fbo_skip_first_pass)
+        fbo_draw_with_program(&primary_fbo, &first_pass_shader);
 
     effects_apply(&primary_fbo);
 
