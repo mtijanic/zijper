@@ -1,4 +1,53 @@
+#
+# Ruleset specific TLK entries
+#
 [200000]Text:	Zijper ruleset
+#
+# dialog.tlk override entries
+#   - Stuff that is easier to override than to find and replace all StrRefs
+#
+[111]Text:	Select your Character's homeland
+[112]Text:	Midport
+[113]Text:	Cryk
+[114]Text:	Al-Nishaad
+[115]Text:	Ranzington
+[116]Text:	<OtherLocation1>
+[117]Text:	<OtherLocation2>
+[118]Text:	<OtherLocation3>
+[119]Text:	<OtherLocation4>
+[120]Text:	<OtherLocation5>
+[136]Text:	Perception
+[142]Text:	Homeland
+[143]Text:	Abilities
+[144]Text:	Background
+[152]Text:	Nickname
+[260]Text:	Description of Homelands
+[448]Text:	<OtherLocation5> description
+[449]Text:	<OtherLocation3> description
+[450]Text:	<OtherLocation4> description
+[451]Text:	Al-Nishaad is the largest empire...
+[452]Text:	Midport is the largest city...
+[453]Text:	Cryk is small kingdom...
+[454]Text:	<OtherLocation2> description
+[455]Text:	Ranzington is a city on the island of Anphillia...
+[456]Text:	<OtherLocation1> description
+[458]Text:	Homeland effects your starting location, equipment, knowledge and interactions with various non-player characters.
+[462]Text:	Perception measures a character's senses and their ability to notice concealed objects and truths.
+[464]Text:	The XXX of Loc5
+[465]Text:	The XXX of Loc3
+[466]Text:	The XXX of Loc4
+[467]Text:	The Empire of Al-Nishaad
+[468]Text:	The Free City of Midport
+[469]Text:	The Kingdom of Cryk
+[470]Text:	The XXX of Loc2
+[471]Text:	The Free City of Ranzington
+[472]Text:	The XXX of Loc1
+[476]Text:	Perception Information
+[484]Text:	Your character's background is her profession or vocation. It represents what the character has been doing before the events of the game. It will provide a small unique bonus at the start, and may unlock custom interactions, but has no bearing on the further mechanics of character's progression.
+[486]Text:	You may enter any nickname here, if you want, or leave it blank.
+#
+# Races (Name, ConvName, ConvNameLower, ConvNamePlural, Description, Biography)
+#
 [200001]Text:	Beastman
 [200002]Text:	Beastman
 [200003]Text:	beastman
@@ -41,6 +90,9 @@
 [200064]Text:	Humans
 [200065]Text:	Description:Human
 [200066]Text:	Biography:Human
+#
+# Skills
+#
 [200100]Text:	Arcana - Primal
 [200101]Text:	Concentration
 [200102]Text:	Mechanics
@@ -105,6 +157,9 @@
 [200229]Text:	Description:MeleeTwoHanded
 [200230]Text:	Description:MeleeShield
 [200231]Text:	Description:MeleeUnarmed
+#
+# Backgrounds
+#
 [200500]Text:	Adventurer
 [200501]Text:	Adventurers
 [200502]Text:	adventurer
@@ -309,6 +364,9 @@
 [201001]Text:	Clergy
 [201002]Text:	clergy
 [201003]Text:	DESCRIPTION:Clergy
+#
+# Feats - Ambition
+#
 [202000]Text:	Ambition: Fame
 [202001]Text:	Ambition: Fortune
 [202002]Text:	Ambition: Infamy
@@ -353,6 +411,9 @@
 [202119]Text:	Description:Ambition: Regress
 [202120]Text:	Description:Ambition: Equality
 [202121]Text:	Description:Ambition: Love
+#
+# Feats - Trait
+#
 [202200]Text:	Trait: Absent Minded
 [202201]Text:	Trait: Aggressive
 [202202]Text:	Trait: Cautious
