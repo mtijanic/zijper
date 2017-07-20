@@ -1,4 +1,4 @@
-#!/usr/bin/env perl 
+#!/usr/bin/env perl
 # -*- perl -*-
 ######################################################################
 # tlkencode.pl -- Simple program to encode BioWare tlk files
@@ -141,37 +141,39 @@ $prev_index = 0;
 while (<>) {
     chomp;
     if (/^\[(\d+)\]([^$Opt::separator]*)$Opt::separator(.*)$/) {
-	# Actual string item.
-	$index = $1;
-	$label = $2;
-	$value = $3;
-	$value =~ s/\%([0-9a-fA-f][0-9a-fA-f])/pack("H*", $1)/ge;
-	if ($label eq 'Flags') {
-	    $value = oct $value if ($value =~ /^0/);
-	}
-	if ($index != $prev_index) {
-	    $tlk->string($prev_index, $temp{Text});
-	    delete $temp{Text};
-	    $tlk->string_info($prev_index, %temp);
-	    %temp = ();
-	}
-	$prev_index = $index;
-	$temp{$label} = $value;
+    	# Actual string item.
+    	$index = $1;
+    	$label = $2;
+    	$value = $3;
+    	$value =~ s/\%([0-9a-fA-f][0-9a-fA-f])/pack("H*", $1)/ge;
+    	if ($label eq 'Flags') {
+    	    $value = oct $value if ($value =~ /^0/);
+    	}
+    	if ($index != $prev_index) {
+    	    $tlk->string($prev_index, $temp{Text});
+    	    delete $temp{Text};
+    	    $tlk->string_info($prev_index, %temp);
+    	    %temp = ();
+    	}
+    	$prev_index = $index;
+    	$temp{$label} = $value;
     } elsif (/^([^$Opt::separator]*)$Opt::separator(.*)$/) {
-	$label = $1;
-	$value = $2;
-	$value =~ s/\%([0-9a-fA-f][0-9a-fA-f])/pack("H*", $1)/ge;
-	if ($label eq "File_type") {
-	    $tlk->file_type($value);
-	} elsif ($label eq "File_version") {
-	    $tlk->file_version($value);
-	} elsif ($label eq "Language_ID") {
-	    $tlk->language_id($value);
-	} elsif ($label eq "String_count") {
-	    $tlk->string_count($value);
-	} else {
-	    die "Unknown label : $label";
-	}
+    	$label = $1;
+    	$value = $2;
+    	$value =~ s/\%([0-9a-fA-f][0-9a-fA-f])/pack("H*", $1)/ge;
+    	if ($label eq "File_type") {
+    	    $tlk->file_type($value);
+    	} elsif ($label eq "File_version") {
+    	    $tlk->file_version($value);
+    	} elsif ($label eq "Language_ID") {
+    	    $tlk->language_id($value);
+    	} elsif ($label eq "String_count") {
+    	    $tlk->string_count($value);
+    	} else {
+    	    die "Unknown label : $label";
+    	}
+    } elsif (/^\s*\#.*$/){
+        # comment, ignore
     } else {
 	die "Parse error on line $_";
     }
@@ -193,7 +195,7 @@ exit 0;
 sub read_rc_file {
     my($file) = @_;
     my($next, $space);
-    
+
     if (open(RCFILE, "<$file")) {
 	while (<RCFILE>) {
 	    chomp;
@@ -271,22 +273,22 @@ Prints out the usage information.
 
 =item B<--version> B<-V>
 
-Prints out the version information. 
+Prints out the version information.
 
 =item B<--verbose> B<-v>
 
 Enables the verbose prints. This option can be given multiple times,
-and each time it enables more verbose prints. 
+and each time it enables more verbose prints.
 
 =item B<--config> I<config-file>
 
 All options given by the command line can also be given in the
 configuration file. This option is used to read another configuration
-file in addition to the default configuration file. 
+file in addition to the default configuration file.
 
 =item B<--output> B<-o> I<output_file>
 
-Resulting binary tlk is written to this file. 
+Resulting binary tlk is written to this file.
 
 =item B<--separator> B<-s> I<separator>
 
@@ -321,5 +323,5 @@ Tero Kivinen <kivinen@iki.fi>.
 =head1 HISTORY
 
 This program appeared as a pair to the tlkprint(1) after we needed to
-create our own custom tlk files. 
+create our own custom tlk files.
 
