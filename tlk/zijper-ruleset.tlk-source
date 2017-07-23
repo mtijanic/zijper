@@ -45,6 +45,13 @@
 [476]Text:	Perception Information
 [484]Text:	Your character's background is her profession or vocation. It represents what the character has been doing before the events of the game. It will provide a small unique bonus at the start, and may unlock custom interactions, but has no bearing on the further mechanics of character's progression.
 [486]Text:	You may enter any nickname here, if you want, or leave it blank.
+#Uninjured....dead
+[6409]Text:
+[6410]Text:
+[6411]Text:	Tired
+[6412]Text:	Exhausted
+[6413]Text:	Barely standing
+[6414]Text:	Unconscious
 #
 # Races (Name, ConvName, ConvNameLower, ConvNamePlural, Description, Biography)
 #

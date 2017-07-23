@@ -67,9 +67,9 @@ If a character is wounded, their max stamina is lowered.
 
 #### Willpower
 
-Willpower is the mental equivalent of stamina - a measure of characters ability to perform mental tasks. Mechanics-wise, it functions similarly to stamina, but without gear penalties.
+Willpower is the mental equivalent of stamina - a measure of character's ability to perform mental tasks. Mechanics-wise, it functions similarly to stamina, but without gear penalties.
 
-Total willpower is determined by a characters intelligence and charisma.
+Total willpower is determined by a character's intelligence and charisma.
 
 #### Background
 
@@ -91,14 +91,14 @@ After creation, characters develop further by progressing their skills and acqui
 
 Skill ranks are what is actually used in the mechanical calculations. Additionally, achieving a certain rank in a skill unlocks some abilities. Other abilities require story related events as well.
 
-In addition to skill experience, characters also gain weapon experience. Fighting with a certain weapon type will increase the characters proficiency with that weapon type.
+In addition to skill experience, characters also gain weapon experience. Fighting with a certain weapon type will increase the character's proficiency with that weapon type.
 
 
 ### Combat
 
 The world is a dangerous place, and at times combat can be hard to avoid. Yet, combat is Serious Business - one wrong step and it could mean the end for you. This is directly conflicting with the ruleset's goal of still being fun.
 
-To compensate for the realism of wounds and death, the combat relies heavily on stamina. Each attack, dodge, parry and hit deplete a characters stamina pool. Running out means losing consciousness, which in turn means certain death.
+To compensate for the realism of wounds and death, the combat relies heavily on stamina. Each attack, dodge, parry and hit deplete a character's stamina pool. Running out means losing consciousness, which in turn means certain death.
 
 Characters can also suffer wounds in combat before their stamina runs out. A hit on a character does a certain amount of damage that is directly subtracted from stamina. Armors and other gear can reduce the amount of damage suffered.
 If, after all adjustment, the total damage taken is above 10% current stamina, the character suffers a wound.
@@ -109,7 +109,7 @@ If, after all adjustment, the total damage taken is above 10% current stamina, t
 
 #### Combat modes
 
-Primary method of controlling a character in combat is through combat modes. The character can stay defensive, conserving their strength; or they can be reckless and aim to kill at a higher risk to themselves. The players task is to figure out their characters advantage over the enemy - be it equipment, position, skill or something else entirely - and tailor their combat to it.
+Primary method of controlling a character in combat is through combat modes. The character can stay defensive, conserving their strength; or they can be reckless and aim to kill at a higher risk to themselves. The player's task is to figure out their character's advantage over the enemy - be it equipment, position, skill or something else entirely - and tailor their combat to it.
 
 ### Magic
 
@@ -125,7 +125,7 @@ As this is all done in NWN, many things in the ruleset need to be adapted to the
 
 - Classes, levels and alignment have been completely removed
     - During character creation, instead of classes, players pick backgrounds
-    - Instead of alignment, players pick the characters homeland
+    - Instead of alignment, players pick the character's homeland
 - Hit Points are replaced by Stamina, with base being (10 + con_modifier)*100
 - Stamina is spent every round (~6sec) that a physical action was made
     - Amount spent:  (base_amount_for_action + armor_check_penalty - str_modifier) * encumbrance_level
