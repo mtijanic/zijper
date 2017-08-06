@@ -22,6 +22,7 @@ LDLIBS=-lGLEW -lGL
 
 
 all: _out/zijper-client.so
+	$(call copy_up,$^)
 
 OBJECTS = $(addprefix _out/,$(SOURCES:.c=.o))
 
