@@ -19,6 +19,8 @@ scripts:
 .PHONY: scripts resources $(RESOURCE_SUBDIRS)
 
 _out/zijper.mod: resources scripts | outdir
+	$(call report,"verify-resources")
+	$(Q)./verify-resources.sh
 	$(call report,"erfpack")
 	$(Q)$(TOOLS)/erfpack.pl -m -o $@ $(ALL_RESOURCES) $(ALL_SCRIPTS)
 
