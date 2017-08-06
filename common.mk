@@ -22,7 +22,12 @@ clean:
 	-$(Q)rm -rf _out
 	$(ECHO) "Removed zijper/$(shell realpath --relative-to $(ZIJPER_DIR) _out)"
 
-.PHONY: clean all install
+sweep:
+	$(ECHO) "Sweeping..."
+	$(Q)find . -type d -name _out
+	$(Q)find . -type d -name _out | xargs rm -rf
+
+.PHONY: clean all install sweep
 
 # $1 - name of command
 define report
