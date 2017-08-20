@@ -42,6 +42,7 @@ extern FILE *logfile;
 
 void apply_patch(uintptr_t address, const void *patch, size_t patch_size);
 void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy);
+void single_call_detour(uintptr_t address, void *func);
 
 extern uint32_t screen_width;
 extern uint32_t screen_height;

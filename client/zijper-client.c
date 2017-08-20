@@ -79,6 +79,15 @@ void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy)
 
     return trampoline;
 }
+
+void single_call_detour(uintptr_t address, void *func)
+{
+    uint8_t hook[5] = {0xe8};
+    uint32_t offset = (uint32_t)(func) - address - 5;
+    memcpy(&hook[1], &offset, 4);
+    apply_patch(address, hook, sizeof(hook));
+}
+
 //
 // Weak stubs
 // If a C file is removed from compilation, the functions will be stubbed

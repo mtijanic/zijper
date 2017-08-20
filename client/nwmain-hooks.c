@@ -21,11 +21,11 @@ struct globals globals;
         originals.func = dlsym(RTLD_NEXT, #func);  \
     } while (0)
 
-#define HOOK_NWMAIN_FUNCTION(func, addr)                               \
-    do {                                                               \
-        extern typeof(*wrappers.func) hook_##func;                     \
-        wrappers.func = hook_##func;                                   \
-        originals.func = make_detour((void*)addr, wrappers.func, 5);   \
+#define HOOK_NWMAIN_FUNCTION(func, addr, ...)                                    \
+    do {                                                                         \
+        extern typeof(*wrappers.func) hook_##func;                               \
+        wrappers.func = hook_##func;                                             \
+        originals.func = make_detour((void*)addr, wrappers.func, 5 __VA_ARGS__); \
     } while (0)
 
 
