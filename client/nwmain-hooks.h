@@ -31,6 +31,8 @@ struct functions
     int  (*CNWCMessage__HandleServerToPlayerMessage)(void *this, uint8_t *buffer, uint32_t size);
     int  (*CNWSMessage__SendServerToPlayerMessage)(void *this, uint32_t nPlayerId, uint8_t nMajor, uint8_t nMinor, uint8_t *pBuffer, uint32_t nBufferSize);
     void (*NWSScriptVarTable__SetString)(void *this, CExoString *varname, CExoString *value);
+
+    void (*Scene__RenderSkyBoxes)(void *this);
 };
 
 /// @brief Bypasses custom logic in the hooks

@@ -13,10 +13,12 @@ static int fbo_initialized;
 
 struct fbo primary_fbo;
 struct fbo gui_fbo;
+struct fbo skybox_fbo;
 
 struct program first_pass_shader;
 struct program second_pass_shader;
 struct program passthrough_shader;
+struct program skybox_shader;
 
 /// @todo load from environment
 // The only thing vertex shader does is pass the coordinates to the fragment shader
@@ -29,6 +31,7 @@ static GLuint common_shader;
 static const char first_pass_shader_name[]  = "shaders/first_pass.frag";
 static const char second_pass_shader_name[] = "shaders/second_pass.frag";
 static const char passthrough_shader_name[] = "shaders/passthrough.frag";
+static const char skybox_shader_name[]      = "shaders/skybox.frag";
 
 /// @todo Get from environment. For now, controlled by debugger only
 int fbo_skip_first_pass;
@@ -137,10 +140,12 @@ void fbo_init(void)
 
     fbo_alloc(&primary_fbo);
     fbo_alloc(&gui_fbo);
+    fbo_alloc(&skybox_fbo);
 
     fbo_alloc_program(&first_pass_shader,  first_pass_shader_name);
     fbo_alloc_program(&second_pass_shader, second_pass_shader_name);
     fbo_alloc_program(&passthrough_shader, passthrough_shader_name);
+    fbo_alloc_program(&skybox_shader,      skybox_shader_name);
 
     effects_init();
     fbo_initialized = 1;
@@ -154,8 +159,10 @@ void fbo_destroy(void)
     fbo_free_program(&first_pass_shader);
     fbo_free_program(&second_pass_shader);
     fbo_free_program(&passthrough_shader);
+    fbo_free_program(&skybox_shader);
     fbo_free(&gui_fbo);
     fbo_free(&primary_fbo);
+    fbo_free(&skybox_fbo);
 
     glDeleteShader(vertex_shader);
     glDeleteShader(common_shader);
@@ -209,14 +216,21 @@ void fbo_draw_all(void)
     // First pass shader renders back to primary FBO, second pass renders to main FB.
     glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);
 
+
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//    glBlendColor(0.5, 0.5, 0.5, 0.5);
+//    glDisable(GL_BLEND);
+
     if (!fbo_skip_first_pass)
         fbo_draw_with_program(&primary_fbo, &first_pass_shader);
 
     effects_apply(&primary_fbo);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    fbo_draw_with_program(&skybox_fbo, &skybox_shader);
     fbo_draw_with_program(&primary_fbo, &second_pass_shader);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -238,6 +252,11 @@ void fbo_use(int which)
           break;
         case FBO_GUI:
             glBindFramebuffer(GL_FRAMEBUFFER, gui_fbo.fbo);
+            glClearColor(0.0, 0.0, 0.0, 0.0);
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+          break;
+        case FBO_SKYBOX:
+            glBindFramebuffer(GL_FRAMEBUFFER, skybox_fbo.fbo);
             glClearColor(0.0, 0.0, 0.0, 0.0);
             glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
           break;

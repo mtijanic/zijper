@@ -49,10 +49,12 @@ struct program
 
 extern struct fbo primary_fbo;
 extern struct fbo gui_fbo;
+extern struct fbo skybox_fbo;
 
 extern struct program first_pass_shader;
 extern struct program second_pass_shader;
 extern struct program passthrough_shader;
+extern struct program skybox_shader;
 
 void fbo_alloc(struct fbo *fbo);
 void fbo_free(struct fbo *fbo);

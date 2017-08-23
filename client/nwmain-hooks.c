@@ -40,6 +40,7 @@ void nwmain_hooks_initialize(void)
     HOOK_NWMAIN_FUNCTION(CNWSMessage__SendServerToPlayerMessage,   0x083d58c4);
     HOOK_NWMAIN_FUNCTION(NWSScriptVarTable__SetString,             0x083f219c);
     HOOK_NWMAIN_FUNCTION(CGuiMan__UpdateAndRender,                 0x084b61e4);
+    HOOK_NWMAIN_FUNCTION(Scene__RenderSkyBoxes,                    0x085187c4);
 }
 
 
@@ -91,6 +92,17 @@ void hook_NWSScriptVarTable__SetString(void *this, CExoString *varname, CExoStri
     }
     return originals.NWSScriptVarTable__SetString(this, varname, value);
 }
+
+
+
+void hook_Scene__RenderSkyBoxes(void *this)
+{
+    //globals.CGuiMan = this;
+    fbo_use(FBO_SKYBOX);
+    originals.Scene__RenderSkyBoxes(this);
+    fbo_use(FBO_PRIMARY);
+}
+
 
 void SDL_GL_SwapBuffers(void)
 {

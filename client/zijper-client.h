@@ -85,6 +85,7 @@ void framerate_print_report(FILE *f);
 #define FBO_NONE    0
 #define FBO_PRIMARY 1
 #define FBO_GUI     2
+#define FBO_SKYBOX  3
 
 void fbo_draw_all(void);
 void fbo_use(int which);
