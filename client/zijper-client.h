@@ -20,6 +20,8 @@
 
 #define UNUSED(x) (void)sizeof(x)
 
+#define COUNTOF(a) (sizeof(a) / sizeof(a[0]))
+
 extern FILE *logfile;
 
 #define _STR2(x) #x

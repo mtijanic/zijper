@@ -188,15 +188,34 @@ int SDL_PollEvent(void *event)
 
 void **SDL_ListModes(void *fmt, uint32_t flags)
 {
-    struct {
+    struct SDL_Rect {
         int16_t x, y;
         uint16_t w, h;
-    } **r = (void*)originals.SDL_ListModes(fmt, flags);
+    };
+
+    struct SDL_Rect **r = (void*)originals.SDL_ListModes(fmt, flags);
 
     if ((int)r != -1)
     {
-        r[0]->h = 900;
-        r[0]->w = 1600;
+        static struct SDL_Rect valid_modes[] =
+        {
+            {0, 0, 1920, 1080},
+            {0, 0, 1600, 900},
+            {0, 0, 1440, 900},
+            {0, 0, 1366, 768},
+            {0, 0, 1280, 1024},
+            {0, 0, 1280, 800},
+            {0, 0, 1024, 768},
+            {0, 0, 800,  600}
+        };
+        static struct SDL_Rect *valid_mode_ptrs[COUNTOF(valid_modes) + 1];
+        if (valid_mode_ptrs[0] == NULL)
+        {
+            for (size_t i = 0; i < COUNTOF(valid_modes); i++)
+                valid_mode_ptrs[i] = &valid_modes[i];
+        }
+
+        return (void*)valid_mode_ptrs;
     }
     return (void*)r;
 }
