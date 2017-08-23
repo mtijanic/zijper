@@ -35,6 +35,7 @@ void nwmain_hooks_initialize(void)
     HOOK_LIBRARY_FUNCTION(SDL_SetVideoMode);
     HOOK_LIBRARY_FUNCTION(SDL_PeepEvents);
     HOOK_LIBRARY_FUNCTION(SDL_PollEvent);
+    HOOK_LIBRARY_FUNCTION(SDL_ListModes);
 
     HOOK_NWMAIN_FUNCTION(CNWCMessage__HandleServerToPlayerMessage, 0x0815ed58);
     HOOK_NWMAIN_FUNCTION(CNWSMessage__SendServerToPlayerMessage,   0x083d58c4);
@@ -182,4 +183,20 @@ int SDL_PollEvent(void *event)
     int r = originals.SDL_PollEvent(event);
     update_input_data(event);
     return r;
+}
+
+
+void **SDL_ListModes(void *fmt, uint32_t flags)
+{
+    struct {
+        int16_t x, y;
+        uint16_t w, h;
+    } **r = (void*)originals.SDL_ListModes(fmt, flags);
+
+    if ((int)r != -1)
+    {
+        r[0]->h = 900;
+        r[0]->w = 1600;
+    }
+    return (void*)r;
 }
