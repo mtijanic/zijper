@@ -46,6 +46,7 @@ struct globals
     void *CNWSMessage;
     void *CNWCMessage;
     void *CGuiMan;
+    void *Scene;
 };
 extern struct globals globals;
 

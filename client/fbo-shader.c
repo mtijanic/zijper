@@ -36,6 +36,8 @@ static const char skybox_shader_name[]      = "shaders/skybox.frag";
 /// @todo Get from environment. For now, controlled by debugger only
 int fbo_skip_first_pass;
 
+int draw_skybox;
+
 void fbo_alloc(struct fbo *fbo)
 {
     glActiveTexture(GL_TEXTURE0);
@@ -230,7 +232,12 @@ void fbo_draw_all(void)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    fbo_draw_with_program(&skybox_fbo, &skybox_shader);
+
+    if (draw_skybox)
+    {
+        fbo_draw_with_program(&skybox_fbo, &skybox_shader);
+        draw_skybox = 0;
+    }
     fbo_draw_with_program(&primary_fbo, &second_pass_shader);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

@@ -98,7 +98,10 @@ void hook_NWSScriptVarTable__SetString(void *this, CExoString *varname, CExoStri
 
 void hook_Scene__RenderSkyBoxes(void *this)
 {
-    //globals.CGuiMan = this;
+    globals.Scene = this;
+
+    extern int draw_skybox;
+    draw_skybox = 1;
     fbo_use(FBO_SKYBOX);
     originals.Scene__RenderSkyBoxes(this);
     fbo_use(FBO_PRIMARY);
