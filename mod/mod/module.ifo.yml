@@ -34,26 +34,27 @@ Mod_GVar_List:
 Mod_HakList:
   type: list
   value:
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_!fightingsfx.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_!tilereskins.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_!tilesets.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_2da.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_creatures.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_items.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_placeables.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_race.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_race2.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe2.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe3.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe4.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_sounds.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_tilesets.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_vfxgui.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: keep.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: medieval.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: medievalrural.hak}}
-  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: arabiannights.hak}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_!fightingsfx}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_!tilereskins}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_!tilesets}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_2da}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_creatures}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_items}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_placeables}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_race}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_race2}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe2}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe3}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_robe4}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_sounds}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_tilesets}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: q_vfxgui}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: keep}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: medieval}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: medievalrural}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: arabiannights}}
+  - !nwn-lib.elv.es,2013-07:struct {__struct_id: 8, Mod_Hak: {type: cexostr, value: mountainforest}}
 Mod_ID: {type: void, value: !binary "HtadIWWFrOpySO70QupOYg=="}
 Mod_IsSaveGame: {type: byte, value: 0}
 Mod_MinGameVer: {type: cexostr, value: '1.69'}

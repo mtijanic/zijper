@@ -11,11 +11,11 @@
 [113]Text:	Cryk
 [114]Text:	Al-Nishaad
 [115]Text:	Ranzington
-[116]Text:	<OtherLocation1>
-[117]Text:	<OtherLocation2>
-[118]Text:	<OtherLocation3>
-[119]Text:	<OtherLocation4>
-[120]Text:	<OtherLocation5>
+[116]Text:	<OtherLoc1>
+[117]Text:	<OtherLoc2>
+[118]Text:	<OtherLoc3>
+[119]Text:	<OtherLoc4>
+[120]Text:	<OtherLoc5>
 [136]Text:	Perception
 [142]Text:	Homeland
 [143]Text:	Abilities
@@ -52,6 +52,8 @@
 [6412]Text:	Exhausted
 [6413]Text:	Barely standing
 [6414]Text:	Unconscious
+# (Class skill)
+[52951]Text:	+
 #
 # Races (Name, ConvName, ConvNameLower, ConvNamePlural, Description, Biography)
 #
