@@ -101,7 +101,7 @@ void hook_Scene__RenderSkyBoxes(void *this)
     globals.Scene = this;
 
     int nSkyboxCurrent = *(int*)((uintptr_t)this + 40);
-    if (nSkyboxCurrent != -1)
+    if (nSkyboxCurrent != -1 && !debug_data.disable_all_effects)
     {
         extern int draw_skybox;
         draw_skybox = 1;
@@ -171,6 +171,26 @@ static void update_input_data(void *sdl_event)
             {
                 input_data.is_rmb_down = mouse_button_event->state;
                 input_data.was_rmb_up  = !mouse_button_event->state;
+            }
+            break;
+        }
+
+        case 0x2: // Key down
+        //case 0x3: // Key up
+        {
+            // TODO: this is getting ridiculous, just pull in the SDL types already
+            struct  {
+                uint8_t type, which, state;
+                struct {
+                    uint8_t scancode;
+                    int sym, mod;
+                    uint16_t unicode;
+                } keysym;
+            } *keyboard_event = sdl_event;
+
+            if (keyboard_event->keysym.sym == 302) // scroll lock
+            {
+                debug_data.disable_all_effects = !debug_data.disable_all_effects;
             }
             break;
         }

@@ -46,6 +46,11 @@ void apply_patch(uintptr_t address, const void *patch, size_t patch_size);
 void *make_detour(void *old_func, void *new_func, size_t bytes_to_copy);
 void single_call_detour(uintptr_t address, void *func);
 
+struct debug_data {
+    uint8_t disable_all_effects;
+};
+extern struct debug_data debug_data;
+
 extern uint32_t screen_width;
 extern uint32_t screen_height;
 

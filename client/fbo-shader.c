@@ -204,6 +204,9 @@ void fbo_draw(struct fbo *fbo, GLuint texture_coord)
 }
 void fbo_draw_with_program(struct fbo *fbo, struct program *program)
 {
+    if (debug_data.disable_all_effects)
+        program = &passthrough_shader;
+
     glUseProgram(program->program);
     fbo_prepare(fbo);
     fbo_program_update_uniforms(program);
@@ -217,12 +220,6 @@ void fbo_draw_all(void)
 
     // First pass shader renders back to primary FBO, second pass renders to main FB.
     glBindFramebuffer(GL_FRAMEBUFFER, primary_fbo.fbo);
-
-
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//    glBlendColor(0.5, 0.5, 0.5, 0.5);
-//    glDisable(GL_BLEND);
 
     if (!fbo_skip_first_pass)
         fbo_draw_with_program(&primary_fbo, &first_pass_shader);
