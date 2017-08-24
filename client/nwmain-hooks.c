@@ -114,7 +114,6 @@ void hook_Scene__RenderSkyBoxes(void *this)
     originals.Scene__RenderSkyBoxes(this);
 }
 
-
 void SDL_GL_SwapBuffers(void)
 {
     fbo_draw_all();
@@ -137,30 +136,25 @@ void *SDL_SetVideoMode(int width, int height, int bpp, uint32_t flags)
     return originals.SDL_SetVideoMode(width, height, bpp, flags);
 }
 
-static void update_input_data(void *sdl_event)
+
+#include "sdl-types.h"
+static void update_input_data(SDL_Event *sdl_event)
 {
-    switch (*(uint8_t*)sdl_event)
+    switch (sdl_event->type)
     {
-        case 0x4: // mouse motion
+        case SDL_MOUSEMOTION:
         {
-            struct {
-                uint8_t type, which, state;
-                uint16_t x, y;
-                int16_t xrel, yrel;
-            } *motion_event = sdl_event;
+            SDL_MouseMotionEvent *motion_event = sdl_event;
 
             input_data.mouse_x = motion_event->x;
             input_data.mouse_y = motion_event->y;
             break;
         }
 
-        case 0x5: // mouse button down
-        case 0x6: // mouse button up
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
         {
-            struct {
-                uint8_t type, which, button, state;
-                uint16_t x, y;
-            } *mouse_button_event = sdl_event;
+            SDL_MouseButtonEvent *mouse_button_event = sdl_event;
 
             if (mouse_button_event->button == 1)
             {
@@ -175,20 +169,12 @@ static void update_input_data(void *sdl_event)
             break;
         }
 
-        case 0x2: // Key down
-        //case 0x3: // Key up
+        case SDL_KEYDOWN:
+        //case SDL_KEYUP:
         {
-            // TODO: this is getting ridiculous, just pull in the SDL types already
-            struct  {
-                uint8_t type, which, state;
-                struct {
-                    uint8_t scancode;
-                    int sym, mod;
-                    uint16_t unicode;
-                } keysym;
-            } *keyboard_event = sdl_event;
+            SDL_KeyboardEvent *keyboard_event = sdl_event;
 
-            if (keyboard_event->keysym.sym == 302) // scroll lock
+            if (keyboard_event->keysym.sym == SDLK_SCROLLOCK)
             {
                 debug_data.disable_all_effects = !debug_data.disable_all_effects;
             }
@@ -201,10 +187,10 @@ int SDL_PeepEvents(void *events, int numevents, unsigned action, uint32_t mask)
 {
     int r = originals.SDL_PeepEvents(events, numevents, action, mask);
 
-    if (action != 0) // Not SDL_ADDEVENT
+    if (action != SDL_ADDEVENT)
     {
         for (int i = 0; i < numevents; i++)
-            update_input_data(events + i*16);
+            update_input_data((SDL_Event*)events + i);
     }
     return r;
 }
@@ -218,16 +204,11 @@ int SDL_PollEvent(void *event)
 
 void **SDL_ListModes(void *fmt, uint32_t flags)
 {
-    struct SDL_Rect {
-        int16_t x, y;
-        uint16_t w, h;
-    };
-
-    struct SDL_Rect **r = (void*)originals.SDL_ListModes(fmt, flags);
+    SDL_Rect **r = (void*)originals.SDL_ListModes(fmt, flags);
 
     if ((int)r != -1)
     {
-        static struct SDL_Rect valid_modes[] =
+        static SDL_Rect valid_modes[] =
         {
             {0, 0, 1920, 1080},
             {0, 0, 1600, 900},
@@ -238,7 +219,7 @@ void **SDL_ListModes(void *fmt, uint32_t flags)
             {0, 0, 1024, 768},
             {0, 0, 800,  600}
         };
-        static struct SDL_Rect *valid_mode_ptrs[COUNTOF(valid_modes) + 1];
+        static SDL_Rect *valid_mode_ptrs[COUNTOF(valid_modes) + 1];
         if (valid_mode_ptrs[0] == NULL)
         {
             for (size_t i = 0; i < COUNTOF(valid_modes); i++)
