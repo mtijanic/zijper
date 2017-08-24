@@ -100,11 +100,18 @@ void hook_Scene__RenderSkyBoxes(void *this)
 {
     globals.Scene = this;
 
-    extern int draw_skybox;
-    draw_skybox = 1;
-    fbo_use(FBO_SKYBOX);
+    int nSkyboxCurrent = *(int*)((uintptr_t)this + 40);
+    if (nSkyboxCurrent != -1)
+    {
+        extern int draw_skybox;
+        draw_skybox = 1;
+        //fbo_use(FBO_SKYBOX);
+        //originals.Scene__RenderSkyBoxes(this);
+        //fbo_use(FBO_PRIMARY);
+        return;
+    }
+
     originals.Scene__RenderSkyBoxes(this);
-    fbo_use(FBO_PRIMARY);
 }
 
 
